@@ -9,6 +9,7 @@ import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../Fo
 export const sketch = (p: p5) => {
     let world: World
     let currentDropRadius: number
+    let isDropping: boolean
 
     const settings = {
         debug: false,
@@ -16,11 +17,14 @@ export const sketch = (p: p5) => {
         nextFrame,
         restart,
         dropMinRadius: 20,
-        dropImpactFactor: 0.1
+        dropImpactFactor: 0.1,
+        isDifferentialGrowthActive: true,
     }
 
     p.setup = () => {
-        p.createCanvas(600, 600)
+        const canvas = p.createCanvas(600, 600)
+        canvas.mousePressed(mousePressed)
+        canvas.mouseReleased(mouseReleased)
 
         world = new World()
         const gui = new GUI()
@@ -29,6 +33,7 @@ export const sketch = (p: p5) => {
             folder.add(settings, property)
         }
 
+        world.addWorldParameters(gui)
         AddDifferentialGrowthParameters(gui)
         restart()
     }
@@ -36,7 +41,7 @@ export const sketch = (p: p5) => {
     p.draw = () => {
         p.background(255)
 
-        if (p.mouseIsPressed) {
+        if (isDropping) {
             const addedRadius = 2.5
             currentDropRadius += addedRadius
             p.ellipse(p.mouseX, p.mouseY, currentDropRadius * 2)
@@ -56,21 +61,32 @@ export const sketch = (p: p5) => {
             drawDebug()
     }
 
-    p.mousePressed = () => {
+    function mousePressed() {
         currentDropRadius = 0
+
+        isDropping = true
+
     }
 
-    p.mouseReleased = () => {
+    function mouseReleased() {
+        if (!isDropping)
+            return
+
+        isDropping = false
+
         if (currentDropRadius < settings.dropMinRadius)
             return
         const dropPoint = p.createVector(p.mouseX, p.mouseY)
-        const path = CreateCirclePath(dropPoint, currentDropRadius)
+        const path = CreateCirclePath(dropPoint, currentDropRadius, 20)
         world.addPath(path)
     }
 
     function update() {
         world.preUpdate()
-        DifferentialGrowthUpdate(world.paths, world.tree)
+
+        if (settings.isDifferentialGrowthActive)
+            DifferentialGrowthUpdate(world.paths, world.tree)
+
         world.lateUpdate()
     }
 

@@ -47,6 +47,7 @@ function GrowPathByNodeDistance(path: Path, maxDistance: number) {
 
         const newPoint = GetMidPoint(node.point, nextNode.point)
         const newNode = new Node(newPoint)
+        newNode.force = new p5.Vector(node.force.x, node.force.y)
         newNodes.push({ i: i + newNodes.length + 1, node: newNode })
     }
 

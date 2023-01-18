@@ -13,8 +13,11 @@ export class Node {
         this.force.add(force)
     }
 
+    preserveForce(forcePreserveAmount: number) {
+        this.force.mult(forcePreserveAmount)
+    }
+
     applyForce() {
         this.point.add(this.force)
-        this.force.sub(this.force)
     }
 }
