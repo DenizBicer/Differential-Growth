@@ -3,12 +3,13 @@ import { GUI } from 'dat.gui'
 
 import { CreateCirclePath, DrawPath } from "../Core/path";
 import { World } from "../Core/World";
+import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 
 export const sketch = (p: p5) => {
     let world: World
     const settings = {
-        debug: false,
-        play: false,
+        debug: true,
+        play: true,
         nextFrame,
         restart,
     }
@@ -23,7 +24,7 @@ export const sketch = (p: p5) => {
             folder.add(settings, property)
         }
 
-        world.addParametersToGui(gui)
+        AddDifferentialGrowthParameters(gui)
         restart()
     }
 
@@ -33,7 +34,7 @@ export const sketch = (p: p5) => {
         p.background(255)
 
         if (settings.play) {
-            world.update()
+            update()
         }
         p.noFill()
         world.paths.forEach(path => DrawPath(p, path))
@@ -42,8 +43,14 @@ export const sketch = (p: p5) => {
             drawDebug()
     }
 
+    function update() {
+        world.preUpdate()
+        DifferentialGrowthUpdate(world.paths, world.tree)
+        world.lateUpdate()
+    }
+
     function nextFrame() {
-        world.update()
+        update()
     }
 
     function restart() {

@@ -70,7 +70,7 @@ export const sketch = (p: p5) => {
 
     function update() {
         world.preUpdate()
-        // DifferentialGrowthUpdate(world.paths, world.tree)
+        DifferentialGrowthUpdate(world.paths, world.tree)
         world.lateUpdate()
     }
 

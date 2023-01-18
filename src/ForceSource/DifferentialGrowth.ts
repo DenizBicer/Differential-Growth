@@ -11,7 +11,7 @@ const settings = {
     alignmentMagnitude: .24,
     repulsionMagnitude: .63,
     repulsionRadius: 5,
-    maxNodeDistance: 30
+    maxNodeDistance: 25
 }
 
 const zeroVector = new p5.Vector(0, 0)
