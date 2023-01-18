@@ -1,11 +1,11 @@
 import './style.css'
 import { sketchManager, SketchMap } from './Sketch/manageSketches'
-import { mainSketch } from './Sketch/simple'
+import { sketch } from './Sketch/inkDropSketch'
 
 const sketches: SketchMap[] = [
   {
     id: 'sketch',
-    sketch: mainSketch,
+    sketch,
   }
 ]
 

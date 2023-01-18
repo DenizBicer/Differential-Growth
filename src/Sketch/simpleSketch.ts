@@ -4,7 +4,7 @@ import { GUI } from 'dat.gui'
 import { CreateCirclePath, DrawPath } from "../Core/path";
 import { World } from "../Core/World";
 
-export const mainSketch = (p: p5) => {
+export const sketch = (p: p5) => {
     let world: World
     const settings = {
         debug: false,

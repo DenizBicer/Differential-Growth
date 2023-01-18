@@ -1,9 +1,9 @@
 
 import p5 from "p5";
 import { GUI } from "dat.gui";
-import { Path } from "./path";
-import { Tree } from "./World";
-import { Node } from './Node';
+import { Path } from "../Core/path";
+import { Tree } from "../Core/World";
+import { Node } from '../Core/Node';
 import knn from 'rbush-knn';
 
 const settings = {
@@ -15,6 +15,11 @@ const settings = {
 }
 
 const zeroVector = new p5.Vector(0, 0)
+
+export function DifferentialGrowthUpdate(paths: Path[], tree: Tree) {
+    UpdateDifferentialGrowthForces(paths, tree)
+    GrowPathsByNodeDistance(paths)
+}
 
 export function AddDifferentialGrowthParameters(gui: GUI) {
     const folder = gui.addFolder('Differential Growth')

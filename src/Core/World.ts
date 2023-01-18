@@ -1,6 +1,6 @@
 import { GUI } from "dat.gui";
 import RBush from "rbush";
-import { AddDifferentialGrowthParameters, GrowPathsByNodeDistance, UpdateDifferentialGrowthForces } from "./DifferentialGrowth";
+import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { Path } from "./path";
 import { Node } from "./Node"
 
@@ -32,9 +32,7 @@ export class World {
 
     update() {
         this.buildTree()
-
-        UpdateDifferentialGrowthForces(this.paths, this.tree)
-        GrowPathsByNodeDistance(this.paths)
+        DifferentialGrowthUpdate(this.paths, this.tree)
 
         this.applyForces()
     }
