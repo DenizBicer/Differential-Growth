@@ -2,7 +2,7 @@ import p5 from "p5";
 import { angleToDir } from "./Math";
 import { Node } from "./Node";
 
-export function CreateCirclePath(center: p5.Vector, radius: number, resolution: number = 60): Path {
+export function CreateCirclePath(center: p5.Vector, radius: number, resolution: number = 30): Path {
 
     const nodes: Node[] = []
 
@@ -10,7 +10,6 @@ export function CreateCirclePath(center: p5.Vector, radius: number, resolution: 
         const t = i / resolution
         const ang = t * Math.PI * 2
         const vector = angleToDir(ang)
-
         const position = p5.Vector.add(center, p5.Vector.mult(vector, radius))
         nodes.push(new Node(position))
     }

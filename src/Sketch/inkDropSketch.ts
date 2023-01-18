@@ -4,6 +4,7 @@ import { GUI } from 'dat.gui'
 import { CreateCirclePath, DrawPath } from "../Core/path";
 import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
+import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -15,6 +16,7 @@ export const sketch = (p: p5) => {
         nextFrame,
         restart,
         dropMinRadius: 20,
+        dropImpactFactor: 0.1
     }
 
     p.setup = () => {
@@ -27,7 +29,7 @@ export const sketch = (p: p5) => {
             folder.add(settings, property)
         }
 
-        world.addParametersToGui(gui)
+        AddDifferentialGrowthParameters(gui)
         restart()
     }
 
@@ -35,12 +37,16 @@ export const sketch = (p: p5) => {
         p.background(255)
 
         if (p.mouseIsPressed) {
-            currentDropRadius += 2.5
-            p.ellipse(p.mouseX, p.mouseY, currentDropRadius)
+            const addedRadius = 2.5
+            currentDropRadius += addedRadius
+            p.ellipse(p.mouseX, p.mouseY, currentDropRadius * 2)
+
+            const dropPoint = p.createVector(p.mouseX, p.mouseY)
+            AddDropForce(dropPoint, currentDropRadius * settings.dropImpactFactor, world.paths)
         }
 
         if (settings.play) {
-            world.update()
+            update()
         }
 
         p.noFill()
@@ -59,12 +65,17 @@ export const sketch = (p: p5) => {
             return
         const dropPoint = p.createVector(p.mouseX, p.mouseY)
         const path = CreateCirclePath(dropPoint, currentDropRadius)
-        AddDropForce(dropPoint, currentDropRadius, world.paths)
         world.addPath(path)
     }
 
+    function update() {
+        world.preUpdate()
+        // DifferentialGrowthUpdate(world.paths, world.tree)
+        world.lateUpdate()
+    }
+
     function nextFrame() {
-        world.update()
+        update()
     }
 
     function restart() {
