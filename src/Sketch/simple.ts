@@ -14,7 +14,7 @@ export const mainSketch = (p: p5) => {
     }
 
     p.setup = () => {
-        p.createCanvas(400, 400)
+        p.createCanvas(600, 600)
 
         world = new World()
         const gui = new GUI()
