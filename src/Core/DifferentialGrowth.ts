@@ -3,13 +3,14 @@ import p5 from "p5";
 import { GUI } from "dat.gui";
 import { Path } from "./path";
 import { Tree } from "./World";
+import { Node } from './Node';
 import knn from 'rbush-knn';
 
 const settings = {
     attractionMagnitude: .1,
     alignmentMagnitude: .1,
     repulsionMagnitude: .1,
-    repulsionRadius: 20,
+    repulsionRadius: 5,
 }
 
 const zeroVector = new p5.Vector(0, 0)
@@ -31,6 +32,14 @@ function UpdateForcesInPath(path: Path, tree: Tree) {
         const prevNode = path.tryGetPreviousNode(i)
         const nextNode = path.tryGetNextNode(i)
         const node = nodes[i]
+
+        if (prevNode === null) {
+            console.log('prev node is null', i)
+        }
+
+        if (nextNode === null) {
+            console.log('next node is null', i)
+        }
 
         const attractionForceToPrevious = prevNode ? CalculateDirectedForce(node.point, prevNode.point, settings.attractionMagnitude) : zeroVector
         const attractionForceToNext = nextNode ? CalculateDirectedForce(node.point, nextNode.point, settings.attractionMagnitude) : zeroVector
@@ -55,13 +64,15 @@ function CalculateAlignmentForce(current: p5.Vector, previous: p5.Vector, next: 
 }
 
 function CalculateRepulsionForce(current: p5.Vector, tree: Tree, radius: number, magnitude: number): p5.Vector {
-    const neighbours = knn(tree,
+    const neighbours: Node[] = knn(tree,
         current.x,
         current.y,
         undefined,
         undefined,
         radius * radius);
 
-    console.log(neighbours.length)
-    return zeroVector
+    const sumOfForces = new p5.Vector()
+    neighbours.forEach(neighbour => sumOfForces.add(CalculateDirectedForce(neighbour.point, current, magnitude)))
+
+    return sumOfForces
 }

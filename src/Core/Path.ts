@@ -34,7 +34,7 @@ export class Path {
     }
 
     tryGetNextNode(index: number): Node | null {
-        const i = this.closed ? (index + 1 % this.nodes.length) : index + 1
+        const i = this.closed ? ((index + 1) % this.nodes.length) : index + 1
         return i < this.nodes.length ? this.nodes[i] : null
     }
 

@@ -18,6 +18,10 @@ export class World {
         this.tree = new Tree()
     }
 
+    clear() {
+        this.paths.splice(0, this.paths.length)
+    }
+
     addParametersToGui(gui: GUI) {
         AddDifferentialGrowthParameters(gui)
     }
