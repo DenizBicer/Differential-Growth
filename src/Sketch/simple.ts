@@ -8,9 +8,9 @@ export const mainSketch = (p: p5) => {
     let world: World
     const settings = {
         debug: false,
-        play: true,
-        nextFrame: nextFrame,
-        restart: restart,
+        play: false,
+        nextFrame,
+        restart,
     }
 
     p.setup = () => {
@@ -56,9 +56,16 @@ export const mainSketch = (p: p5) => {
 
     function drawDebug() {
         p.push()
-        p.stroke('red')
+
+
         world.paths.forEach(path => {
             path.nodes.forEach(node => {
+                p.fill('blue')
+                p.noStroke()
+                p.ellipse(node.point.x, node.point.y, 5)
+
+                p.noFill()
+                p.stroke('red')
                 p.line(node.point.x, node.point.y, node.point.x + node.force.x, node.point.y + node.force.y)
             })
         })
