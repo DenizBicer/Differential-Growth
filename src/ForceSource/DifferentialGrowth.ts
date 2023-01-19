@@ -4,7 +4,6 @@ import { GUI } from "dat.gui";
 import { Path } from "../Core/path";
 import { Tree } from "../Core/World";
 import { Node } from '../Core/Node';
-import knn from 'rbush-knn';
 
 const settings = {
     isForcesActive: true,
@@ -12,7 +11,7 @@ const settings = {
     attractionMagnitude: .12,
     alignmentMagnitude: .24,
     repulsionMagnitude: .63,
-    repulsionRadius: 5,
+    repulsionRadius: 45,
     maxNodeDistance: 25,
     maxNodeCountPerPath: 400,
 }
@@ -43,7 +42,8 @@ function GrowPathByNodeDistance(path: Path, maxDistance: number) {
     if (nodes.length > settings.maxNodeCountPerPath)
         return
 
-    const newNodes: [{ i: number, node: Node }] = []
+
+    const newNodes: { i: number, node: Node }[] = []
     for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i]
         const nextNode = path.tryGetNextNode(i)
@@ -110,12 +110,15 @@ function CalculateAlignmentForce(current: p5.Vector, previous: p5.Vector, next: 
 }
 
 function CalculateRepulsionForce(current: p5.Vector, tree: Tree, radius: number, magnitude: number): p5.Vector {
-    const neighbours: Node[] = knn(tree,
-        current.x,
-        current.y,
-        undefined,
-        undefined,
-        radius * radius);
+    const x = current.x
+    const y = current.y
+    const halfSize = radius / 2
+    const neighbours = tree.search({
+        minX: x - halfSize,
+        maxX: x + halfSize,
+        minY: y - halfSize,
+        maxY: y + halfSize
+    })
 
     const sumOfForces = new p5.Vector()
     neighbours.forEach(neighbour => sumOfForces.add(CalculateDirectedForce(neighbour.point, current, magnitude)))

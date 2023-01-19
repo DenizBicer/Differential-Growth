@@ -19,8 +19,6 @@
   "dependencies": {
     "dat.gui": "^0.7.9",
     "p5": "^1.5.0",
-    "rbush": "^3.0.1",
-    "rbush-knn": "^3.0.1",
-    "tinyqueue": "^2.0.3"
+    "rbush": "^3.0.1"
   }
 }
