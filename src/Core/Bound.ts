@@ -1,11 +1,23 @@
 import p5 from "p5";
 import { Path } from "./path";
 
-export function CircularBoundPaths(paths: Path[], center: p5.Vector, radius: number) {
-    paths.forEach(path => CircularBoundPath(path, center, radius))
+export type Rect = {
+    minX: number,
+    minY: number,
+    maxX: number,
+    maxY: number
 }
 
-function CircularBoundPath(path: Path, center: p5.Vector, radius: number) {
+export function RectBoundPath(path: Path, rect: Rect) {
+    path.nodes.forEach(node => {
+        const x = node.point.x
+        const y = node.point.y
+        const isNodeInRect = x > rect.minX && x < rect.maxX && y > rect.minY && y < rect.maxY
+        node.isFixed = !isNodeInRect
+    })
+}
+
+export function CircularBoundPath(path: Path, center: p5.Vector, radius: number) {
     path.nodes.forEach(node => {
         const distanceToCenter = p5.Vector.dist(center, node.point)
         const isNodeInsideBound = distanceToCenter <= radius
