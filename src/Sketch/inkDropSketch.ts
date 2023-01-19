@@ -21,7 +21,7 @@ export const sketch = (p: p5) => {
     }
 
     p.setup = () => {
-        const canvas = p.createCanvas(600, 600)
+        const canvas = p.createCanvas(800, 600)
         canvas.mousePressed(mousePressed)
         canvas.mouseReleased(mouseReleased)
 

@@ -13,15 +13,11 @@ const settings = {
     alignmentMagnitude: .24,
     repulsionMagnitude: .63,
     repulsionRadius: 5,
-    maxNodeDistance: 25
+    maxNodeDistance: 25,
+    maxNodeCountPerPath: 400,
 }
 
 const zeroVector = new p5.Vector(0, 0)
-
-export function DifferentialGrowthUpdate(paths: Path[], tree: Tree) {
-    UpdateDifferentialGrowthForces(paths, tree)
-    GrowPathsByNodeDistance(paths)
-}
 
 export function AddDifferentialGrowthParameters(gui: GUI) {
     const folder = gui.addFolder('Differential Growth')
@@ -30,7 +26,12 @@ export function AddDifferentialGrowthParameters(gui: GUI) {
     }
 }
 
-export function GrowPathsByNodeDistance(paths: Path[]) {
+export function DifferentialGrowthUpdate(paths: Path[], tree: Tree) {
+    UpdateDifferentialGrowthForces(paths, tree)
+    GrowPathsByNodeDistance(paths)
+}
+
+function GrowPathsByNodeDistance(paths: Path[]) {
     if (!settings.isGrowthActive)
         return
     paths.forEach(p => GrowPathByNodeDistance(p, settings.maxNodeDistance))
@@ -38,6 +39,10 @@ export function GrowPathsByNodeDistance(paths: Path[]) {
 
 function GrowPathByNodeDistance(path: Path, maxDistance: number) {
     const nodes = path.nodes
+
+    if (nodes.length > settings.maxNodeCountPerPath)
+        return
+
     const newNodes: [{ i: number, node: Node }] = []
     for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i]
@@ -61,7 +66,7 @@ function GrowPathByNodeDistance(path: Path, maxDistance: number) {
 
 }
 
-export function UpdateDifferentialGrowthForces(paths: Path[], tree: Tree) {
+function UpdateDifferentialGrowthForces(paths: Path[], tree: Tree) {
     if (!settings.isForcesActive)
         return
     paths.forEach(p => UpdateForcesInPath(p, tree))
