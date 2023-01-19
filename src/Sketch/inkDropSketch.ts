@@ -18,7 +18,6 @@ export const sketch = (p: p5) => {
         restart,
         dropMinRadius: 20,
         dropImpactFactor: 0.1,
-        isDifferentialGrowthActive: true,
     }
 
     p.setup = () => {
@@ -84,8 +83,7 @@ export const sketch = (p: p5) => {
     function update() {
         world.preUpdate()
 
-        if (settings.isDifferentialGrowthActive)
-            DifferentialGrowthUpdate(world.paths, world.tree)
+        DifferentialGrowthUpdate(world.paths, world.tree)
 
         world.lateUpdate()
     }

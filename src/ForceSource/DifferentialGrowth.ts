@@ -7,6 +7,8 @@ import { Node } from '../Core/Node';
 import knn from 'rbush-knn';
 
 const settings = {
+    isForcesActive: true,
+    isGrowthActive: true,
     attractionMagnitude: .12,
     alignmentMagnitude: .24,
     repulsionMagnitude: .63,
@@ -29,6 +31,8 @@ export function AddDifferentialGrowthParameters(gui: GUI) {
 }
 
 export function GrowPathsByNodeDistance(paths: Path[]) {
+    if (!settings.isGrowthActive)
+        return
     paths.forEach(p => GrowPathByNodeDistance(p, settings.maxNodeDistance))
 }
 
@@ -58,6 +62,8 @@ function GrowPathByNodeDistance(path: Path, maxDistance: number) {
 }
 
 export function UpdateDifferentialGrowthForces(paths: Path[], tree: Tree) {
+    if (!settings.isForcesActive)
+        return
     paths.forEach(p => UpdateForcesInPath(p, tree))
 }
 
