@@ -1,11 +1,12 @@
 import p5 from "p5";
 import { GUI } from 'dat.gui'
 
-import { CreateCirclePath, DrawPath } from "../Core/path";
+import { CreateCirclePath, Path } from "../Core/path";
 import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
-import { RectBoundPath } from "../Core/Bound";
+import { CircularBoundPath, RectBoundPath } from "../Core/Bound";
+import { AddStylizedDrawParameters, drawPathHistory } from "../Core/StylizedDraw";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -19,7 +20,9 @@ export const sketch = (p: p5) => {
         restart,
         dropMinRadius: 20,
         dropImpactFactor: 0.1,
-        boundMargin: 50
+        boundMargin: 50,
+        boundRadius: 300,
+        useCircularBound: false
     }
 
     p.setup = () => {
@@ -36,11 +39,12 @@ export const sketch = (p: p5) => {
 
         world.addWorldParameters(gui)
         AddDifferentialGrowthParameters(gui)
+        AddStylizedDrawParameters(gui)
         restart()
     }
 
     p.draw = () => {
-        p.background(255)
+        p.background(255, 25)
 
         if (isDropping) {
             const addedRadius = 2.5
@@ -56,7 +60,7 @@ export const sketch = (p: p5) => {
         }
 
         p.noFill()
-        world.paths.forEach(path => DrawPath(p, path))
+        world.paths.forEach(path => drawPathHistory(p, path))
 
         if (settings.debug)
             drawDebug()
@@ -87,8 +91,18 @@ export const sketch = (p: p5) => {
         DifferentialGrowthUpdate(world.paths, world.tree)
         world.lateUpdate()
 
-
+        const center = p.createVector(p.width / 2, p.height / 2)
         world.paths.forEach(path => {
+            boundPath(path, center)
+        })
+
+    }
+
+    function boundPath(path: Path, center: p5.Vector) {
+        if (settings.useCircularBound) {
+            CircularBoundPath(path, center, settings.boundRadius)
+        }
+        else {
             RectBoundPath(path,
                 {
                     minX: settings.boundMargin,
@@ -96,8 +110,7 @@ export const sketch = (p: p5) => {
                     maxX: p.width - settings.boundMargin,
                     maxY: p.height - settings.boundMargin
                 })
-        })
-
+        }
     }
 
     function nextFrame() {
