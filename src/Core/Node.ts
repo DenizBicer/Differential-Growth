@@ -42,7 +42,7 @@ export class Node {
             this.history.push(newHistoryPoint)
             this.history.push(newHistoryPoint)
             this.distantHistory.push(0)
-            this.distantHistory.push(0)
+            this.distantHistory.push(1)
         }
 
 

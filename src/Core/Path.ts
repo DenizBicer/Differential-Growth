@@ -16,13 +16,6 @@ export function CreateCirclePath(center: p5.Vector, radius: number, resolution: 
     return new Path(nodes)
 }
 
-export function DrawPath(p: p5, path: Path) {
-    p.beginShape()
-    path.nodes.forEach(n => p.curveVertex(n.point.x, n.point.y))
-    const endShape = path.closed ? p.CLOSE : undefined
-    p.endShape(endShape)
-}
-
 export class Path {
     nodes: Node[]
     closed: boolean

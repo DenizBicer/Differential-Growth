@@ -6,7 +6,7 @@ import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CircularBoundPath, RectBoundPath } from "../Core/Bound";
-import { AddStylizedDrawParameters, drawPathHistory } from "../Core/StylizedDraw";
+import { AddStylizedDrawParameters, drawPath, drawPathHistory, drawPathHistoryOutline } from "../Core/StylizedDraw";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -18,11 +18,15 @@ export const sketch = (p: p5) => {
         play: true,
         nextFrame,
         restart,
+        backgroundGray: 255,
+        backgroundAlpha: 10,
         dropMinRadius: 20,
         dropImpactFactor: 0.1,
         boundMargin: 50,
         boundRadius: 300,
-        useCircularBound: false
+        useCircularBound: false,
+        addNewPathToWorld: true,
+        singlePath: true,
     }
 
     p.setup = () => {
@@ -44,7 +48,7 @@ export const sketch = (p: p5) => {
     }
 
     p.draw = () => {
-        p.background(255, 25)
+        p.background(settings.backgroundGray, settings.backgroundAlpha)
 
         if (isDropping) {
             const addedRadius = 2.5
@@ -59,8 +63,18 @@ export const sketch = (p: p5) => {
             update()
         }
 
+
         p.noFill()
-        world.paths.forEach(path => drawPathHistory(p, path))
+
+        // if (settings.drawOutline)
+        //     world.paths.forEach(path => drawPathHistoryOutline(p, path))
+        // else
+        //     world.paths.forEach(path => drawPathHistory(p, path))
+
+        if (settings.singlePath)
+            world.paths.forEach(path => drawPath(p, path))
+        else
+            world.paths.forEach(path => drawPathHistoryOutline(p, path))
 
         if (settings.debug)
             drawDebug()
@@ -81,6 +95,10 @@ export const sketch = (p: p5) => {
 
         if (currentDropRadius < settings.dropMinRadius)
             return
+
+        if (!settings.addNewPathToWorld)
+            return
+
         const dropPoint = p.createVector(p.mouseX, p.mouseY)
         const path = CreateCirclePath(dropPoint, currentDropRadius, 20)
         world.addPath(path)
