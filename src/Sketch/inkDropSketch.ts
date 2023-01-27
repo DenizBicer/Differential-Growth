@@ -6,7 +6,7 @@ import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CircularBoundPath, RectBoundPath } from "../Core/Bound";
-import { AddStylizedDrawParameters, drawPath, drawPathHistory, drawPathHistoryOutline } from "../Core/StylizedDraw";
+import { AddStylizedDrawParameters, drawPath, drawPathHistoryOutline } from "../Core/StylizedDraw";
 
 export const sketch = (p: p5) => {
     let world: World

@@ -64,7 +64,7 @@ export function drawPathHistory(p: p5 | any, path: Path): void {
 
 export function drawPathHistoryOutline(p: p5 | any, path: Path): void {
     p.push()
-    applyFillAndStrokeSettings()
+    applyFillAndStrokeSettings(p)
 
     const maxDistance = path.nodes.map(p => p.getLength()).reduce((p, c) => Math.max(p, c))
     const repeatCount = maxDistance / settings.repeatDistanceInterval
