@@ -1,10 +1,11 @@
 ﻿import p5 from "p5";
-import {GUI} from "dat.gui"
-import {Path} from "../Core/Path";
-import {Tree} from "../Core/World";
-import {Node} from "../Core/Node";
+import { GUI } from "dat.gui"
+import { Path } from "../Core/Path";
+import { Tree } from "../Core/World";
+import { Node } from "../Core/Node";
 
 const settings = {
+    minNeighbourDistance: 20,
     maxNeighbourDistance: 55,
     lineThickness: 1,
     minOpacity: 23,
@@ -39,9 +40,13 @@ function DrawNeighbourLines(p: p5 | any, node: Node, tree: Tree) {
         maxY: y + halfSize
     })
 
+    const distanceRange = settings.maxNeighbourDistance - settings.minNeighbourDistance
     neighbours.forEach(n => {
         const distance = p5.Vector.dist(n.point, node.point)
-        const pct = 1 - distance / settings.maxNeighbourDistance
+        if (distance < settings.minNeighbourDistance)
+            return
+
+        const pct = 1 - distance / distanceRange
         const opacity = p.lerp(settings.minOpacity, settings.maxOpacity, pct)
         p.stroke(0, 0, 0, opacity)
         p.line(x, y, n.point.x, n.point.y)

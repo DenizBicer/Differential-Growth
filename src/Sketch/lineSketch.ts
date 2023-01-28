@@ -120,7 +120,7 @@ export const sketch = (p: p5) => {
 
                 p.noFill()
                 p.stroke('red')
-                p.line(node.point.x, node.point.y, node.point.x + node.force.x, node.point.y + node.force.y)
+                p.line(node.point.x, node.point.y, node.point.x + node.prevForce.x * 10, node.point.y + node.prevForce.y * 10)
             })
         })
         p.pop()
