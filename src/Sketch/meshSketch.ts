@@ -66,7 +66,6 @@ export const sketch = (p: p5) => {
 
         world.paths.forEach(path => DrawMesh(p, path, world.tree))
 
-
         p.noFill()
 
         if (settings.debug)

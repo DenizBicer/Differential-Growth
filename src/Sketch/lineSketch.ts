@@ -7,6 +7,7 @@ import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../Fo
 import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
 import { CreateLinePath } from "../Core/path";
 import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
+import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -38,6 +39,7 @@ export const sketch = (p: p5) => {
         world.addWorldParameters(gui)
         AddDifferentialGrowthParameters(gui)
         AddMeshDrawParameters(gui)
+        AddNodeDrawParameters(gui)
         AddDirectedForceParameters(gui)
         restart()
     }
@@ -60,6 +62,7 @@ export const sketch = (p: p5) => {
         }
 
         world.paths.forEach(path => DrawMesh(p, path, world.tree))
+        world.paths.forEach(path => DrawNode(p, path, world.tree))
 
 
         p.noFill()
