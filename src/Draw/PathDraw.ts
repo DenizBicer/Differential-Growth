@@ -1,6 +1,6 @@
 import p5 from "p5"
 import { GUI } from "dat.gui"
-import { Path } from "./path"
+import { Path } from "../Core/Path"
 
 const settings = {
     repeatDistanceInterval: 8,
@@ -13,7 +13,7 @@ const settings = {
     stroke: true
 }
 
-export function AddStylizedDrawParameters(gui: GUI) {
+export function AddPathDrawParameters(gui: GUI) {
     const folder = gui.addFolder('Draw')
     for (const property in settings) {
         folder.add(settings, property)
