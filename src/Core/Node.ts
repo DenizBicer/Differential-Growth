@@ -3,6 +3,8 @@ import p5 from "p5";
 export class Node {
     point: p5.Vector
     force: p5.Vector
+    prevForce: p5.Vector
+
     history: p5.Vector[] = []
     distantHistory: number[] = []
 
@@ -12,6 +14,7 @@ export class Node {
     constructor(point: p5.Vector, saveHistory: boolean = true) {
         this.point = point
         this.force = new p5.Vector(0, 0)
+        this.prevForce = new p5.Vector(0, 0)
         this.isFixed = false
         this.saveHistory = saveHistory
     }
@@ -28,7 +31,15 @@ export class Node {
         if (this.isFixed)
             return
 
+        this.force.lerp(this.prevForce, 0.9)
         this.point.add(this.force)
+
+        this.prevForce.x = this.force.x
+        this.prevForce.y = this.force.y
+
+        this.force.x = 0
+        this.force.y = 0
+
         this.addPointToHistory()
     }
 
