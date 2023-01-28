@@ -16,6 +16,14 @@ export function CreateCirclePath(center: p5.Vector, radius: number, resolution: 
     return new Path(nodes)
 }
 
+export function CreateLinePath(start: p5.Vector, end: p5.Vector): Path {
+
+    const nodes: Node[] = []
+    nodes.push(new Node(start))
+    nodes.push(new Node(end))
+    return new Path(nodes, false)
+}
+
 export class Path {
     nodes: Node[]
     closed: boolean

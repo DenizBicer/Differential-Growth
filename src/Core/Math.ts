@@ -6,3 +6,7 @@ export function angleToDir(angRad: number): p5.Vector {
     vector.y = Math.sin(angRad)
     return vector
 }
+
+export function getRandom(min: number, max: number) {
+    return Math.random() * (max - min) + min;
+}

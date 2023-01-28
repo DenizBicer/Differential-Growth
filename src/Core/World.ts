@@ -2,6 +2,8 @@ import RBush from "rbush";
 import { Path } from "./path";
 import { Node } from "./Node"
 import { GUI } from "dat.gui";
+import { getRandom } from "./Math";
+import p5 from "p5";
 
 export class Tree extends RBush<Node> {
     toBBox(t: Node) { return { minX: t.point.x, minY: t.point.y, maxX: t.point.x, maxY: t.point.y }; }
@@ -11,7 +13,8 @@ export class Tree extends RBush<Node> {
 
 
 const settings = {
-    forcePreserveAmount: 0.85
+    forcePreserveAmount: 0.85,
+    randomForceMagnitude: 0.01
 }
 
 export class World {
@@ -48,6 +51,10 @@ export class World {
 
     applyForces() {
         this.paths.forEach(p => p.nodes.forEach(n => {
+            const xNoise = getRandom(-settings.randomForceMagnitude, +settings.randomForceMagnitude)
+            const yNoise = getRandom(-settings.randomForceMagnitude, +settings.randomForceMagnitude)
+            n.addForce(new p5.Vector(xNoise, yNoise))
+
             n.applyForce()
             n.preserveForce(settings.forcePreserveAmount)
         }))

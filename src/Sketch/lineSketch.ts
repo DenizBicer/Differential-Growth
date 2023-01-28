@@ -1,17 +1,17 @@
-﻿import p5 from "p5";
+import p5 from "p5";
 import { GUI } from 'dat.gui'
 
-import { CreateCirclePath } from "../Core/path";
 import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
-import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
 import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
+import { CreateLinePath } from "../Core/path";
+import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
 
 export const sketch = (p: p5) => {
     let world: World
-    let currentDropRadius: number
-    let isDropping: boolean
+    let currentPushRadius: number
+    let isPushing: boolean
 
     const settings = {
         debug: false,
@@ -20,9 +20,7 @@ export const sketch = (p: p5) => {
         restart,
         backgroundGray: 255,
         backgroundAlpha: 255,
-        dropMinRadius: 20,
-        dropImpactFactor: 0.1,
-        addNewPathToWorld: true,
+        dropImpactFactor: 0.1
     }
 
     p.setup = () => {
@@ -47,17 +45,14 @@ export const sketch = (p: p5) => {
     p.draw = () => {
         p.background(settings.backgroundGray, settings.backgroundAlpha)
 
-        if (isDropping) {
+        if (isPushing) {
             const addedRadius = 2.5
-            currentDropRadius += addedRadius
+            currentPushRadius += addedRadius
 
-            currentDropRadius = currentDropRadius > 100 ? 100 : currentDropRadius
-
-            if (settings.addNewPathToWorld)
-                p.ellipse(p.mouseX, p.mouseY, currentDropRadius * 2)
+            currentPushRadius = currentPushRadius > 100 ? 100 : currentPushRadius
 
             const dropPoint = p.createVector(p.mouseX, p.mouseY)
-            AddDropForce(dropPoint, currentDropRadius * settings.dropImpactFactor, world.paths)
+            AddDropForce(dropPoint, currentPushRadius * settings.dropImpactFactor, world.paths)
         }
 
         if (settings.play) {
@@ -74,28 +69,15 @@ export const sketch = (p: p5) => {
     }
 
     function mousePressed() {
-        currentDropRadius = 0
+        currentPushRadius = 0
 
-        isDropping = true
+        isPushing = true
 
     }
 
     function mouseReleased() {
 
-        if (!isDropping)
-            return
-
-        isDropping = false
-
-        if (currentDropRadius < settings.dropMinRadius)
-            return
-
-        if (!settings.addNewPathToWorld)
-            return
-
-        const dropPoint = p.createVector(p.mouseX, p.mouseY)
-        const path = CreateCirclePath(dropPoint, currentDropRadius, 20)
-        world.addPath(path)
+        isPushing = false;
     }
 
 
@@ -119,6 +101,11 @@ export const sketch = (p: p5) => {
 
     function restart() {
         world.clear()
+
+        const margin = p.width / 20
+        const y = p.height / 2
+        const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
+        world.addPath(path)
     }
 
     function drawDebug() {
