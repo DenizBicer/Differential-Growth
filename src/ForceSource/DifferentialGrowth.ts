@@ -8,10 +8,12 @@ import { Node } from '../Core/Node';
 const settings = {
     isForcesActive: true,
     isGrowthActive: true,
+    isShrinkActive: true,
     attractionMagnitude: .12,
     alignmentMagnitude: .24,
     repulsionMagnitude: .63,
     repulsionRadius: 45,
+    minNodeDistance: 10,
     maxNodeDistance: 25,
     maxNodeCountPerPath: 400,
 }
@@ -28,6 +30,7 @@ export function AddDifferentialGrowthParameters(gui: GUI) {
 export function DifferentialGrowthUpdate(paths: Path[], tree: Tree) {
     UpdateDifferentialGrowthForces(paths, tree)
     GrowPathsByNodeDistance(paths)
+    ShrinkPathsByNodeDistance(paths)
 }
 
 function GrowPathsByNodeDistance(paths: Path[]) {
@@ -66,6 +69,34 @@ function GrowPathByNodeDistance(path: Path, maxDistance: number) {
 
 }
 
+function ShrinkPathsByNodeDistance(paths: Path[]) {
+    if (!settings.isShrinkActive)
+        return
+    paths.forEach(p => ShrinkPathByNodeDistance(p, settings.minNodeDistance))
+}
+
+function ShrinkPathByNodeDistance(path: Path, minDistance: number) {
+
+    const nodes = path.nodes
+
+    if (nodes.length < 3)
+        return
+
+    var i = nodes.length
+    while (i--) {
+        const node = nodes[i]
+        const prevNode = path.tryGetPreviousNode(i)
+        if (prevNode === null)
+            continue
+
+        const distance = p5.Vector.dist(node.point, prevNode.point)
+        if (distance > minDistance)
+            continue
+
+        nodes.splice(i, 1)
+    }
+}
+
 function UpdateDifferentialGrowthForces(paths: Path[], tree: Tree) {
     if (!settings.isForcesActive)
         return
@@ -78,14 +109,6 @@ function UpdateForcesInPath(path: Path, tree: Tree) {
         const prevNode = path.tryGetPreviousNode(i)
         const nextNode = path.tryGetNextNode(i)
         const node = nodes[i]
-
-        if (prevNode === null) {
-            console.log('prev node is null', i)
-        }
-
-        if (nextNode === null) {
-            console.log('next node is null', i)
-        }
 
         const attractionForceToPrevious = prevNode ? CalculateDirectedForce(node.point, prevNode.point, settings.attractionMagnitude) : zeroVector
         const attractionForceToNext = nextNode ? CalculateDirectedForce(node.point, nextNode.point, settings.attractionMagnitude) : zeroVector
