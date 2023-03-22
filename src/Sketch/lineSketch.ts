@@ -5,7 +5,7 @@ import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
-import { CreateLinePath } from "../Core/path";
+import { CreateCirclePath, CreateLinePath } from "../Core/path";
 import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
 import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
 
@@ -21,7 +21,8 @@ export const sketch = (p: p5) => {
         restart,
         backgroundGray: 255,
         backgroundAlpha: 255,
-        dropImpactFactor: 0.1
+        dropImpactFactor: 0.1,
+        pushMaxRadius: 200
     }
 
     p.setup = () => {
@@ -51,7 +52,7 @@ export const sketch = (p: p5) => {
             const addedRadius = 2.5
             currentPushRadius += addedRadius
 
-            currentPushRadius = currentPushRadius > 100 ? 100 : currentPushRadius
+            currentPushRadius = currentPushRadius > settings.pushMaxRadius ? settings.pushMaxRadius : currentPushRadius
 
             const dropPoint = p.createVector(p.mouseX, p.mouseY)
             AddDropForce(dropPoint, currentPushRadius * settings.dropImpactFactor, world.paths)
@@ -63,7 +64,6 @@ export const sketch = (p: p5) => {
 
         world.paths.forEach(path => DrawMesh(p, path, world.tree))
         world.paths.forEach(path => DrawNode(p, path, world.tree))
-
 
         p.noFill()
 
@@ -107,7 +107,9 @@ export const sketch = (p: p5) => {
 
         const margin = p.width / 20
         const y = p.height / 2
-        const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
+        // const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
+        // path.nodes.forEach(n => n.isFixed = true)
+        const path = CreateCirclePath(p.createVector(p.width / 2, p.height / 2), 100)
         world.addPath(path)
     }
 
