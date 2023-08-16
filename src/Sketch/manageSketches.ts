@@ -45,7 +45,7 @@ export class sketchManager {
         if (!sketch.p5Instance || !sketch.htmlElement)
             return
 
-        sketch.p5Instance.resizeCanvas(sketch.htmlElement.offsetWidth, sketch.htmlElement.offsetHeight)
+        // sketch.p5Instance.resizeCanvas(sketch.htmlElement.offsetWidth, sketch.htmlElement.offsetHeight)
     }
 
     onPageResize() {
