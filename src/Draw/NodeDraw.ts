@@ -8,9 +8,9 @@ const settings = {
     minNeighbourDistance: 0,
     maxNeighbourDistance: 42,
     minSize: 1,
-    maxSize: 23,
-    minOpacity: 48,
-    maxOpacity: 255
+    maxSize: 10,
+    minOpacity: 200,
+    maxOpacity: 5
 }
 
 
@@ -23,6 +23,7 @@ export function AddNodeDrawParameters(gui: GUI) {
 
 export function DrawNode(p: p5 | any, path: Path, tree: Tree) {
     p.push()
+    p.noStroke()
     path.nodes.forEach(n => {
         DrawNodesDependingOnNeighbourDistance(p, n, tree)
     })

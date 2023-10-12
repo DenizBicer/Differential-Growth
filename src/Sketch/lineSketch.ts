@@ -1,13 +1,14 @@
 import p5 from "p5";
-import { GUI } from 'dat.gui'
+import {GUI} from 'dat.gui'
 
-import { World } from "../Core/World";
-import { AddDropForce } from "../ForceSource/InkDrop";
-import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
-import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
-import { CreateLinePath } from "../Core/path";
-import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
-import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
+import {World} from "../Core/World";
+import {AddDropForce} from "../ForceSource/InkDrop";
+import {AddDifferentialGrowthParameters, DifferentialGrowthUpdate} from "../ForceSource/DifferentialGrowth";
+import {AddAttractionForce, AddDirectedForceParameters} from "../ForceSource/DirectedForce";
+import {CreateLinePath} from "../Core/path";
+import {AddMeshDrawParameters, DrawMesh} from "../Draw/MeshDraw";
+import {AddNodeDrawParameters, DrawNode} from "../Draw/NodeDraw";
+import {record} from "../Record/recording";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -19,6 +20,7 @@ export const sketch = (p: p5) => {
         play: true,
         nextFrame,
         restart,
+        toggleRecording,
         backgroundGray: 255,
         backgroundAlpha: 255,
         dropImpactFactor: 0.1
@@ -94,7 +96,6 @@ export const sketch = (p: p5) => {
         world.lateUpdate()
 
 
-
     }
 
 
@@ -109,6 +110,23 @@ export const sketch = (p: p5) => {
         const y = p.height / 2
         const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
         world.addPath(path)
+    }
+
+    function toggleRecording() {
+        const canvas = document.getElementsByClassName('p5Canvas')[0] as HTMLCanvasElement
+
+        if (!canvas)
+            return
+
+        const recording = record(canvas, 10000)
+
+// download it
+        const link$ = document.createElement('a');
+        link$.setAttribute('download', 'recordingVideo')
+        recording.then(url => {
+            link$.setAttribute('href', url)
+            link$.click()
+        })
     }
 
     function drawDebug() {
