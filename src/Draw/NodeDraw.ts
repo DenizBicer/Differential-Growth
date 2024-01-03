@@ -15,7 +15,7 @@ const settings = {
 
 
 export function AddNodeDrawParameters(gui: GUI) {
-    const folder = gui.addFolder('Node Draw')
+    const folder = gui.addFolder('Draw Node')
     for (const property in settings) {
         folder.add(settings, property)
     }

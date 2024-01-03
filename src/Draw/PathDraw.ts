@@ -14,7 +14,7 @@ const settings = {
 }
 
 export function AddPathDrawParameters(gui: GUI) {
-    const folder = gui.addFolder('Draw')
+    const folder = gui.addFolder('Draw Path')
     for (const property in settings) {
         folder.add(settings, property)
     }

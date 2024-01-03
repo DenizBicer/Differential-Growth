@@ -13,7 +13,7 @@ const settings = {
 }
 
 export function AddMeshDrawParameters(gui: GUI) {
-    const folder = gui.addFolder('Draw')
+    const folder = gui.addFolder('Draw Mesh')
     for (const property in settings) {
         folder.add(settings, property)
     }
