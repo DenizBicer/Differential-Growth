@@ -1,9 +1,10 @@
 import p5 from "p5";
 import { GUI } from 'dat.gui'
 
-import { CreateCirclePath, DrawPath } from "../Core/path";
 import { World } from "../Core/World";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
+import { CreateCirclePath } from "../Core/path";
+import { drawPath } from "../Draw/PathDraw";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -37,7 +38,7 @@ export const sketch = (p: p5) => {
             update()
         }
         p.noFill()
-        world.paths.forEach(path => DrawPath(p, path))
+        world.paths.forEach(path => drawPath(p, path))
 
         if (settings.debug)
             drawDebug()
