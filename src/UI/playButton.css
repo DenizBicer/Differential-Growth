@@ -1,0 +1,58 @@
+.playButton {
+    float: left;
+    width: 26px;
+    height: 26px;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
+
+    transition: all 250ms;
+    font-size: small;
+    margin: 0.4rem 0.1rem;
+    
+    &.inactive {
+        background-color: lightgray;
+        cursor: default;
+        color: red;
+    }
+    
+}
+
+i {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.restart {
+    background-image: url('/src/icons/return.png');
+}
+
+.play {
+    background-image: url('/src/icons/forward.png');
+}
+
+.pause {
+    background-image: url('/src/icons/pause.png');
+}
+
+.next-frame {
+    background-image: url('/src/icons/next.png');
+}
+
+.playButton:hover,
+.playButton:focus {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    color: rgba(0, 0, 0, 0.65);
+
+}
+
+
+.seperator {
+    margin: 0.4rem 8rem 0.4rem 0.4rem;
+}

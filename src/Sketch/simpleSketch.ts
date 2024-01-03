@@ -5,28 +5,29 @@ import { World } from "../Core/World";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
+import { PlayEvents, PlaySettingsUi } from "../UI/playSettings";
 
 export const sketch = (p: p5) => {
     let world: World
-    const settings = {
-        debug: true,
-        play: true,
+    const events: PlayEvents = {
+        updatePlay,
+        updateDebug,
         nextFrame,
         restart,
     }
 
+    let isDebugging:boolean = true
+    let isPlaying:boolean = false
+
     p.setup = () => {
-        p.createCanvas(p.windowWidth, p.windowHeight)
+        const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
 
         world = new World()
         const gui = new GUI()
-        const folder = gui.addFolder('sketch')
-        for (const property in settings) {
-            folder.add(settings, property)
-        }
-
+        
         AddDifferentialGrowthParameters(gui)
         restart()
+        new PlaySettingsUi( canvas.elt, events, isDebugging, isPlaying)
     }
 
 
@@ -34,13 +35,13 @@ export const sketch = (p: p5) => {
     p.draw = () => {
         p.background(255)
 
-        if (settings.play) {
+        if (isPlaying) {
             update()
         }
         p.noFill()
         world.paths.forEach(path => drawPath(p, path))
 
-        if (settings.debug)
+        if (isDebugging)
             drawDebug()
     }
 
@@ -60,6 +61,14 @@ export const sketch = (p: p5) => {
         const path2 = CreateCirclePath(p.createVector(p.width / 2 + 50, p.height / 2), 50)
         world.addPath(path1)
         world.addPath(path2)
+    }
+
+    function updatePlay(play:boolean){
+        isPlaying = play
+    }
+
+    function updateDebug(debug: boolean){
+        isDebugging = debug
     }
 
     function drawDebug() {
