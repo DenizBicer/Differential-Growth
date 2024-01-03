@@ -16,7 +16,7 @@ export const sketch = (p: p5) => {
     }
 
     p.setup = () => {
-        p.createCanvas(600, 600)
+        p.createCanvas(p.windowWidth, p.windowHeight)
 
         world = new World()
         const gui = new GUI()
