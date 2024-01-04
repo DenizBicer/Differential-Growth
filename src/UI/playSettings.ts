@@ -8,12 +8,9 @@ export type PlayEvents = {
     clear: () => void
 }
 
-export type PlayEnum = 'not-playing' | 'not-playing-paused' | 'playing' | 'paused'
-
 export class PlayControlsUi {
     events: PlayEvents
     isDebugging: boolean
-    playingState: PlayEnum
 
     isSimulationStarted: boolean
     isPaused: boolean
@@ -25,7 +22,6 @@ export class PlayControlsUi {
     constructor(element: HTMLElement, e: PlayEvents, isDebugging: boolean, isPlaying: boolean) {
         this.events = e
         this.isDebugging = isDebugging
-        this.playingState = isPlaying ? 'playing' : 'not-playing'
         this.isSimulationStarted = isPlaying
         this.isPaused = false
 
@@ -80,10 +76,6 @@ export class PlayControlsUi {
     }
 
     updateButtons() {
-        //    this.setElementActive(this.playButton, !this.isPlaying)
-        //    this.setElementActive(this.pauseButton, this.isPlaying)
-        //    this.setElementActive(this.nextFrameButton, !this.isPlaying)
-
         const isPlayButtonActive = this.isSimulationStarted
         const isPauseButtonActive = this.isPaused
         const isNextFrameButtonEnabled = this.isSimulationStarted && this.isPaused
