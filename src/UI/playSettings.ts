@@ -4,15 +4,20 @@ export type PlayEvents = {
     updatePlay: (play: boolean) => void,
     updateDebug: (debug: boolean) => void,
     nextFrame: () => void,
-    restart: () => void
+    restart: () => void,
+    clear: () => void
 }
 
-export class PlaySettingsUi {
+export type PlayEnum = 'not-playing' | 'not-playing-paused' | 'playing' | 'paused'
+
+export class PlayControlsUi {
     events: PlayEvents
     isDebugging: boolean
-    isPlaying: boolean
+    playingState: PlayEnum
 
-    restartButton: HTMLElement
+    isSimulationStarted: boolean
+    isPaused: boolean
+
     playButton: HTMLElement
     pauseButton: HTMLElement
     nextFrameButton: HTMLElement
@@ -20,16 +25,25 @@ export class PlaySettingsUi {
     constructor(element: HTMLElement, e: PlayEvents, isDebugging: boolean, isPlaying: boolean) {
         this.events = e
         this.isDebugging = isDebugging
-        this.isPlaying = isPlaying
+        this.playingState = isPlaying ? 'playing' : 'not-playing'
+        this.isSimulationStarted = isPlaying
+        this.isPaused = false
 
         const parentElement = element.parentElement
+        const groupElement = this.createGroup(['playControlsGroup'])
+        parentElement?.before(groupElement)
 
-        this.restartButton = this.createButton('restart', ['playButton', 'seperator'], parentElement, this.events.restart)
-        this.playButton = this.createButton('play', ['playButton'], parentElement, this.play.bind(this))
-        this.pauseButton = this.createButton('pause', ['playButton'], parentElement, this.pause.bind(this))
-        this.nextFrameButton = this.createButton('next-frame', ['playButton'], parentElement, this.events.nextFrame)
+        this.playButton = this.createButton('play', ['playButton'], groupElement, this.play.bind(this))
+        this.pauseButton = this.createButton('pause', ['playButton'], groupElement, this.pause.bind(this))
+        this.nextFrameButton = this.createButton('next-frame', ['playButton'], groupElement, this.events.nextFrame)
 
         this.updateButtons()
+    }
+
+    createGroup(classNames: string[]): HTMLElement {
+        const group = document.createElement('div')
+        classNames.forEach(className => group.classList.add(className))
+        return group
     }
 
     createButton(iconClassName: string, classNames: string[], parentElement: HTMLElement | null, listener: (this: HTMLDivElement, ev: MouseEvent) => any): HTMLElement {
@@ -42,35 +56,62 @@ export class PlaySettingsUi {
     }
 
     play() {
-        this.isPlaying = true
-        this.events.updatePlay(this.isPlaying)
-        this.updateButtons()
+        if (this.isSimulationStarted) {
+            this.events.clear()
+        }
+        else {
+            this.events.restart()
+        }
+
+        this.isSimulationStarted = !this.isSimulationStarted;
+
+        this.updatePlayState()
     }
 
     pause() {
-        this.isPlaying = false
-        this.events.updatePlay(this.isPlaying)
+        this.isPaused = !this.isPaused
+        this.updatePlayState()
+    }
+
+    updatePlayState() {
+        const isPlaying = this.isSimulationStarted && !this.isPaused
+        this.events.updatePlay(isPlaying)
         this.updateButtons()
     }
 
     updateButtons() {
-       this.setElementActive(this.playButton, !this.isPlaying)
-       this.setElementActive(this.pauseButton, this.isPlaying)
-       this.setElementActive(this.nextFrameButton, !this.isPlaying)
+        //    this.setElementActive(this.playButton, !this.isPlaying)
+        //    this.setElementActive(this.pauseButton, this.isPlaying)
+        //    this.setElementActive(this.nextFrameButton, !this.isPlaying)
+
+        const isPlayButtonActive = this.isSimulationStarted
+        const isPauseButtonActive = this.isPaused
+        const isNextFrameButtonEnabled = this.isSimulationStarted && this.isPaused
+
+        this.setElementActive(this.playButton, isPlayButtonActive)
+        this.setElementActive(this.pauseButton, isPauseButtonActive)
+        this.setElementEnabled(this.nextFrameButton, isNextFrameButtonEnabled)
     }
 
     setElementActive(element: HTMLElement, isActive: boolean) {
-        if(isActive)
-        {
-            element.classList.add('active')
-            element.classList.remove('inactive')
+        this.setElementClassNameFlag(element, isActive, 'active', 'inactive')
+    }
+
+    setElementEnabled(element: HTMLElement, isEnabled: boolean) {
+        this.setElementClassNameFlag(element, isEnabled, 'enabled', 'disabled')
+    }
+
+    setElementClassNameFlag(element: HTMLElement, flag: boolean, trueClassName: string, falseClassName: string) {
+        if (flag) {
+            this.exchangeClassNames(element, trueClassName, falseClassName)
         }
-        else
-        {
-            element.classList.add('inactive')
-            element.classList.remove('active')
+        else {
+            this.exchangeClassNames(element, falseClassName, trueClassName)
         }
     }
 
-
+    exchangeClassNames(element: HTMLElement, newClassName: string, oldClassName: string) {
+        element.classList.add(newClassName)
+        element.classList.remove(oldClassName)
+    }
 }
