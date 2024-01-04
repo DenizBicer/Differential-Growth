@@ -2,7 +2,6 @@ import './playButton.css'
 
 export type PlayEvents = {
     updatePlay: (play: boolean) => void,
-    updateDebug: (debug: boolean) => void,
     nextFrame: () => void,
     restart: () => void,
     clear: () => void
@@ -10,7 +9,6 @@ export type PlayEvents = {
 
 export class PlayControlsUi {
     events: PlayEvents
-    isDebugging: boolean
 
     isSimulationStarted: boolean
     isPaused: boolean
@@ -19,9 +17,8 @@ export class PlayControlsUi {
     pauseButton: HTMLElement
     nextFrameButton: HTMLElement
 
-    constructor(element: HTMLElement, e: PlayEvents, isDebugging: boolean, isPlaying: boolean) {
+    constructor(element: HTMLElement, e: PlayEvents, isPlaying: boolean) {
         this.events = e
-        this.isDebugging = isDebugging
         this.isSimulationStarted = isPlaying
         this.isPaused = false
 

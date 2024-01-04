@@ -11,13 +11,11 @@ export const sketch = (p: p5) => {
     let world: World
     const events: PlayEvents = {
         updatePlay,
-        updateDebug,
         nextFrame,
         restart,
         clear,
     }
 
-    let isDebugging: boolean = true
     let isPlaying: boolean = false
 
     p.setup = () => {
@@ -27,7 +25,7 @@ export const sketch = (p: p5) => {
         const gui = new GUI()
 
         AddDifferentialGrowthParameters(gui)
-        new PlayControlsUi(canvas.elt, events, isDebugging, isPlaying)
+        new PlayControlsUi(canvas.elt, events, isPlaying)
     }
 
 
@@ -39,10 +37,18 @@ export const sketch = (p: p5) => {
             update()
         }
         p.noFill()
+        
+        // draw path
         world.paths.forEach(path => drawPath(p, path))
 
-        if (isDebugging)
-            drawDebug()
+        // draw nodes
+        world.paths.forEach(path => {
+            path.nodes.forEach(node => {
+                p.fill('black')
+                p.noStroke()
+                p.ellipse(node.point.x, node.point.y, 4)
+            })
+        })
     }
 
     function update() {
@@ -71,27 +77,4 @@ export const sketch = (p: p5) => {
     function updatePlay(play: boolean) {
         isPlaying = play
     }
-
-    function updateDebug(debug: boolean) {
-        isDebugging = debug
-    }
-
-    function drawDebug() {
-        p.push()
-
-
-        world.paths.forEach(path => {
-            path.nodes.forEach(node => {
-                p.fill('blue')
-                p.noStroke()
-                p.ellipse(node.point.x, node.point.y, 5)
-
-                p.noFill()
-                p.stroke('red')
-                p.line(node.point.x, node.point.y, node.point.x + node.force.x, node.point.y + node.force.y)
-            })
-        })
-        p.pop()
-    }
-
 }
