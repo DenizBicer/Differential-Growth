@@ -5,7 +5,7 @@ import { World } from "../Core/World";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
-import { PlayEvents, PlayControlsUi } from "../UI/playSettings";
+import { PlayEvents, PlayControlsUi } from "../UI/playControlsUi";
 
 export const sketch = (p: p5) => {
     let world: World

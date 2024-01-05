@@ -1,4 +1,4 @@
-import './playSettings.css'
+import './playControlsUi.css'
 
 export type PlayEvents = {
     updatePlay: (play: boolean) => void,
