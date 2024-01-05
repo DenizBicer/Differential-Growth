@@ -13,25 +13,26 @@ export class PlayControlsUi {
     isSimulationStarted: boolean
     isPaused: boolean
 
+    element: HTMLElement
+
     playButton: HTMLElement
     pauseButton: HTMLElement
     nextFrameButton: HTMLElement
 
-    constructor(element: HTMLElement, e: PlayEvents, isPlaying: boolean) {
+    constructor(e: PlayEvents, isPlaying: boolean) {
         this.events = e
         this.isSimulationStarted = isPlaying
         this.isPaused = false
 
-        const parentElement = element.parentElement
-        const groupElement = this.createGroup(['playControlsGroup'])
-        parentElement?.before(groupElement)
+        this.element = this.createGroup(['playControlsGroup'])
 
-        this.playButton = this.createButton('play', ['playButton'], groupElement, this.play.bind(this))
-        this.pauseButton = this.createButton('pause', ['playButton'], groupElement, this.pause.bind(this))
-        this.nextFrameButton = this.createButton('next-frame', ['playButton'], groupElement, this.events.nextFrame)
+        this.playButton = this.createButton('play', ['playButton'], this.element, this.play.bind(this))
+        this.pauseButton = this.createButton('pause', ['playButton'], this.element, this.pause.bind(this))
+        this.nextFrameButton = this.createButton('next-frame', ['playButton'], this.element, this.events.nextFrame)
 
         this.updateButtons()
     }
+
 
     createGroup(classNames: string[]): HTMLElement {
         const group = document.createElement('div')

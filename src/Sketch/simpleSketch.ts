@@ -25,7 +25,8 @@ export const sketch = (p: p5) => {
         const gui = new GUI()
 
         AddDifferentialGrowthParameters(gui)
-        new PlayControlsUi(canvas.elt, events, isPlaying)
+        const playControlsUi = new PlayControlsUi( events, isPlaying)
+        canvas.elt.parentElement.before(playControlsUi.element)
     }
 
 
