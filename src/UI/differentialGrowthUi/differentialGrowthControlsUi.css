@@ -1,0 +1,39 @@
+.differentialGrowthControlsGroup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 8px;
+}
+
+.parameterArea {
+    /* layout */
+    display: flex;
+    width: 100px;
+    height: 100px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+
+    /* style */
+    background: #FFF;
+
+    .customArea {
+        /* layout */
+        width: 75px;
+        height: 70px;
+
+        /* style */
+        background: #93cdff;
+    }
+
+    .parameterTitle {
+        /* font: 400 1.0rem/1.5 -apple-system, helvetica, sans-serif;
+        color: hsl(0, 0%, 33%) */
+        font: 700 0.55rem/1.5 -apple-system, helvetica, sans-serif;
+        color: rgba(0, 0, 0, 0.60);
+
+    }
+}

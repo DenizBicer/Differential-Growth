@@ -4,6 +4,7 @@ import { GUI } from "dat.gui";
 import { Path } from "../Core/path";
 import { Tree } from "../Core/World";
 import { Node } from '../Core/Node';
+import { DifferentialGrowthControlsUi, ParameterChangeEvents } from "../UI/differentialGrowthUi/differentialGrowthControlsUi";
 
 const settings = {
     isForcesActive: true,
@@ -18,7 +19,23 @@ const settings = {
     maxNodeCountPerPath: 400,
 }
 
+const parameterChangeEvents : ParameterChangeEvents = {
+    maxNodeDistanceChanged,
+}
+
 const zeroVector = new p5.Vector(0, 0)
+
+export function CreateDifferentialGrowthParameterUi()
+{
+    const differentialGrowthControlsGroup = new DifferentialGrowthControlsUi(parameterChangeEvents)
+
+    return differentialGrowthControlsGroup.element
+}
+
+function maxNodeDistanceChanged (nodeDistance: number)
+{
+    settings.maxNodeDistance = nodeDistance
+}
 
 export function AddDifferentialGrowthParameters(gui: GUI) {
     const folder = gui.addFolder('Differential Growth')

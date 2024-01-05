@@ -2,7 +2,7 @@ import p5 from "p5";
 import { GUI } from 'dat.gui'
 
 import { World } from "../Core/World";
-import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
+import { AddDifferentialGrowthParameters, CreateDifferentialGrowthParameterUi, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
 import { PlayEvents, PlayControlsUi } from "../UI/playControlsUi";
@@ -16,17 +16,24 @@ export const sketch = (p: p5) => {
         clear,
     }
 
+ 
+
     let isPlaying: boolean = false
 
     p.setup = () => {
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
 
         world = new World()
-        const gui = new GUI()
+        // const gui = new GUI()
 
-        AddDifferentialGrowthParameters(gui)
+        // AddDifferentialGrowthParameters(gui)
+
         const playControlsUi = new PlayControlsUi( events, isPlaying)
         canvas.elt.parentElement.before(playControlsUi.element)
+
+        const differentialGrowthControlsElement = CreateDifferentialGrowthParameterUi()
+        canvas.elt.parentElement.after(differentialGrowthControlsElement)
+        
     }
 
 

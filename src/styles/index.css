@@ -16,8 +16,8 @@
 
 .sketch {
     height: 300px;
-    margin-bottom: 5rem;
-
+    margin: 8px 0px;
+    
     -webkit-user-select: none;
     user-select: none;
 
