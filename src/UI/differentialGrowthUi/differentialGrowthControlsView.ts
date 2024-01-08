@@ -19,7 +19,7 @@ export class DifferentialGrowthControlsView {
         this.createParameterArea(this.element, 'Repulsion Radius')
         const nodeDistanceParameterArea = this.createParameterArea(this.element, 'Node Distance')
 
-        this.nodeDistanceUi = new NodeDistanceUi(nodeDistanceParameterArea)
+        this.nodeDistanceUi = new NodeDistanceUi(nodeDistanceParameterArea, 5, 30)
     }
 
     createGroup(classNames: string[]): HTMLElement {
@@ -51,8 +51,13 @@ export class DifferentialGrowthControlsView {
         this.nodeDistanceUi.setMinNodeDistance(settings.minNodeDistance)
     }
 
+    bindMinNodeDistanceChanged(callback: (distance: number) => void) {
+        this.nodeDistanceUi.bindOnMinDistanceChanged(callback)
+    }
+
     bindMaxNodeDistanceChanged(callback: (distance: number) => void) {
         this.nodeDistanceUi.bindOnMaxDistanceChanged(callback)
     }
+
 
 }

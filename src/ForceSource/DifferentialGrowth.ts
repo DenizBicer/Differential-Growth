@@ -54,8 +54,9 @@ class DifferentialGrowthController {
         this.model = model
         this.view = view
 
-        this.model.bindSettingsChanged(this.onSettingsChanged)
-        this.view.bindMaxNodeDistanceChanged(this.maxNodeDistanceChanged)
+        this.model.bindSettingsChanged(this.onSettingsChanged.bind(this))
+        this.view.bindMaxNodeDistanceChanged(this.maxNodeDistanceChanged.bind(this))
+        this.view.bindMinNodeDistanceChanged(this.minNodeDistanceChanged.bind(this))
 
         this.onSettingsChanged(this.model.settings)
     }
@@ -64,9 +65,14 @@ class DifferentialGrowthController {
         this.view.showSettings(settings)
     }
 
+    minNodeDistanceChanged(nodeDistance: number) {
+        settings.minNodeDistance = nodeDistance
+        this.model._commit(settings)
+    }
+
     maxNodeDistanceChanged(nodeDistance: number) {
-        this.model.settings.maxNodeDistance = nodeDistance
-        this.model._commit
+        settings.maxNodeDistance = nodeDistance
+        this.model._commit(settings)
     }
 }
 
