@@ -1,0 +1,28 @@
+.nodeDistanceGroup {
+    /* layout */
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.sliderArea {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+svg:hover {
+    cursor: pointer;
+    fill: rgba(119, 71, 255, 0.80);
+    stroke: rgba(119, 71, 255, 0.80);
+}
+
+.sliderLabel {
+    font: 700 0.65rem/1.5 -apple-system, helvetica, sans-serif;
+    color: rgba(0, 0, 0, 0.60);
+    width: 30px;
+}

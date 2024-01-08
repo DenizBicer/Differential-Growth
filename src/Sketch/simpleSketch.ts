@@ -16,7 +16,7 @@ export const sketch = (p: p5) => {
         clear,
     }
 
- 
+
 
     let isPlaying: boolean = false
 
@@ -24,16 +24,16 @@ export const sketch = (p: p5) => {
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
 
         world = new World()
-        // const gui = new GUI()
+        const gui = new GUI()
 
-        // AddDifferentialGrowthParameters(gui)
+        AddDifferentialGrowthParameters(gui)
 
-        const playControlsUi = new PlayControlsUi( events, isPlaying)
+        const playControlsUi = new PlayControlsUi(events, isPlaying)
         canvas.elt.parentElement.before(playControlsUi.element)
 
         const differentialGrowthControlsElement = CreateDifferentialGrowthParameterUi()
         canvas.elt.parentElement.after(differentialGrowthControlsElement)
-        
+
     }
 
 
@@ -45,7 +45,7 @@ export const sketch = (p: p5) => {
             update()
         }
         p.noFill()
-        
+
         // draw path
         world.paths.forEach(path => drawPath(p, path))
 
@@ -68,9 +68,8 @@ export const sketch = (p: p5) => {
     function nextFrame() {
         update()
     }
-    
-    function clear()
-    {
+
+    function clear() {
         world.clear()
     }
 

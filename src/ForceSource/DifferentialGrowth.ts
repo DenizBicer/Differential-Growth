@@ -4,9 +4,21 @@ import { GUI } from "dat.gui";
 import { Path } from "../Core/path";
 import { Tree } from "../Core/World";
 import { Node } from '../Core/Node';
-import { DifferentialGrowthControlsUi, ParameterChangeEvents } from "../UI/differentialGrowthUi/differentialGrowthControlsUi";
+import { DifferentialGrowthControlsView } from "../UI/differentialGrowthUi/differentialGrowthControlsView";
 
-const settings = {
+export type DifferentialGrowthSettings = {
+    isForcesActive: boolean,
+    isGrowthActive: boolean,
+    isShrinkActive: boolean,
+    attractionMagnitude: number,
+    alignmentMagnitude: number,
+    repulsionMagnitude: number,
+    repulsionRadius: number,
+    minNodeDistance: number,
+    maxNodeDistance: number,
+    maxNodeCountPerPath: number,
+}
+const settings: DifferentialGrowthSettings = {
     isForcesActive: true,
     isGrowthActive: true,
     isShrinkActive: true,
@@ -19,23 +31,55 @@ const settings = {
     maxNodeCountPerPath: 400,
 }
 
-const parameterChangeEvents : ParameterChangeEvents = {
-    maxNodeDistanceChanged,
+class DifferentialGrowthModel {
+    settings: DifferentialGrowthSettings
+    onSettingsChanged: ((settings: DifferentialGrowthSettings) => void) | undefined = undefined
+    constructor(settings: DifferentialGrowthSettings) {
+        this.settings = settings
+    }
+
+    bindSettingsChanged(callback: (settings: DifferentialGrowthSettings) => void) {
+        this.onSettingsChanged = callback
+    }
+
+    _commit(settings: DifferentialGrowthSettings) {
+        this.onSettingsChanged && this.onSettingsChanged(settings)
+    }
 }
+
+class DifferentialGrowthController {
+    model: DifferentialGrowthModel
+    view: DifferentialGrowthControlsView
+    constructor(model: DifferentialGrowthModel, view: DifferentialGrowthControlsView) {
+        this.model = model
+        this.view = view
+
+        this.model.bindSettingsChanged(this.onSettingsChanged)
+        this.view.bindMaxNodeDistanceChanged(this.maxNodeDistanceChanged)
+
+        this.onSettingsChanged(this.model.settings)
+    }
+
+    onSettingsChanged(settings: DifferentialGrowthSettings) {
+        this.view.showSettings(settings)
+    }
+
+    maxNodeDistanceChanged(nodeDistance: number) {
+        this.model.settings.maxNodeDistance = nodeDistance
+        this.model._commit
+    }
+}
+
 
 const zeroVector = new p5.Vector(0, 0)
 
-export function CreateDifferentialGrowthParameterUi()
-{
-    const differentialGrowthControlsGroup = new DifferentialGrowthControlsUi(parameterChangeEvents)
+export function CreateDifferentialGrowthParameterUi() {
+    const differentialGrowthControlsView = new DifferentialGrowthControlsView()
+    new DifferentialGrowthController(new DifferentialGrowthModel(settings), differentialGrowthControlsView)
 
-    return differentialGrowthControlsGroup.element
+    return differentialGrowthControlsView.element
 }
 
-function maxNodeDistanceChanged (nodeDistance: number)
-{
-    settings.maxNodeDistance = nodeDistance
-}
 
 export function AddDifferentialGrowthParameters(gui: GUI) {
     const folder = gui.addFolder('Differential Growth')
