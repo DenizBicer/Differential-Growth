@@ -3,17 +3,17 @@ import './nodeDistanceUi.css'
 import { Slider } from "./slider";
 
 export class NodeDistanceUi {
-    element: HTMLElement
-    resetButton: SVGElement
+    private element: HTMLElement
+    private resetButton: SVGElement
 
-    minSlider: Slider
-    maxSlider: Slider
+    private minSlider: Slider
+    private maxSlider: Slider
 
-    initialMinNodeDistance: number | undefined
-    initialMaxNodeDistance: number | undefined
+    private initialMinNodeDistance: number | undefined
+    private initialMaxNodeDistance: number | undefined
 
-    onMaxNodeDistanceChanged: ((distance: number) => void) | undefined
-    onMinNodeDistanceChanged: ((distance: number) => void) | undefined
+    private onMaxNodeDistanceChanged: ((distance: number) => void) | undefined
+    private onMinNodeDistanceChanged: ((distance: number) => void) | undefined
 
     constructor(parameterArea: ParameterArea, minValue: number, maxValue: number) {
         this.element = this.createGroup(['nodeDistanceGroup'])
@@ -29,13 +29,13 @@ export class NodeDistanceUi {
         this.setResetButtonVisibility(false)
     }
 
-    createGroup(classNames: string[]): HTMLElement {
+    private createGroup(classNames: string[]): HTMLElement {
         const group = document.createElement('div')
         classNames.forEach(className => group.classList.add(className))
         return group
     }
 
-    setResetButtonVisibility(isVisible: boolean) {
+    private setResetButtonVisibility(isVisible: boolean) {
         this.resetButton.classList.toggle('hidden', !isVisible);
     }
 
@@ -57,7 +57,7 @@ export class NodeDistanceUi {
         this.onMinNodeDistanceChanged = callback
     }
 
-    onResetClicked() {
+    private onResetClicked() {
         if (this.initialMinNodeDistance === undefined || this.initialMaxNodeDistance === undefined) {
             return
         }
@@ -67,15 +67,15 @@ export class NodeDistanceUi {
         this.onMaxNodeDistanceChanged && this.onMaxNodeDistanceChanged(this.initialMaxNodeDistance)
     }
 
-    onMinSliderChanged() {
+    private onMinSliderChanged() {
         this.onChange(this.minSlider.currentValue, this.onMinNodeDistanceChanged)
     }
 
-    onMaxSliderClicked() {
+    private onMaxSliderClicked() {
         this.onChange(this.maxSlider.currentValue, this.onMaxNodeDistanceChanged)
     }
 
-    onChange(newDistance: number, callback: ((distance: number) => void) | undefined) {
+    private onChange(newDistance: number, callback: ((distance: number) => void) | undefined) {
         this.setResetButtonVisibility(true)
         callback && callback(newDistance)
     }
