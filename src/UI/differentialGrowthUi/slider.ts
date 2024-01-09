@@ -8,17 +8,19 @@ export class Slider {
     private knobElement: SVGCircleElement
     private changeEvent: Event
 
-    private minSliderXOffset = 0
-    private maxSliderXOffset = 80
-    private  r = 3.5
+    private minSliderXOffset: number
+    private maxSliderXOffset: number
+    private r = 3.5
 
     private minValue: number
     private maxValue: number
 
     
-    constructor(parentElement: HTMLElement, label: string, minValue: number, maxValue: number) {
+    constructor(parentElement: HTMLElement, label: string, minValue: number, maxValue: number, length: number = 80) {
         this.minValue = minValue
         this.maxValue = maxValue
+        this.minSliderXOffset = this.r
+        this.maxSliderXOffset = length
 
         const sliderArea = document.createElement('div')
         sliderArea.classList.add('sliderArea')
@@ -28,15 +30,17 @@ export class Slider {
         sliderLabel.innerText = label
         sliderArea.appendChild(sliderLabel)
 
+        const width = length + this.r * 2
+
         this.sliderElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGSVGElement
-        this.sliderElement.setAttribute('width', '100')
+        this.sliderElement.setAttribute('width', `${width}`)
         this.sliderElement.setAttribute('height', '8')
-        this.sliderElement.setAttribute('viewBox', '0 0 100 8')
+        this.sliderElement.setAttribute('viewBox', `0 0 ${width} 8`)
         this.sliderElement.setAttribute('fill', '#7747FF')
         this.sliderElement.setAttribute('stroke', '#9B9B9B')
 
         this.lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-        this.lineElement.setAttribute('x1', (this.minSliderXOffset+this.r).toString())
+        this.lineElement.setAttribute('x1', this.minSliderXOffset.toString())
         this.lineElement.setAttribute('y1', '4')
         this.lineElement.setAttribute('x2', '70')
         this.lineElement.setAttribute('y2', '4')
@@ -44,7 +48,7 @@ export class Slider {
         this.sliderElement.appendChild(this.lineElement)
 
         const anchorCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-        anchorCircle.setAttribute('cx', (this.minSliderXOffset+this.r).toString())
+        anchorCircle.setAttribute('cx', this.minSliderXOffset.toString())
         anchorCircle.setAttribute('cy', '4')
         anchorCircle.setAttribute('r', this.r.toString())
         anchorCircle.setAttribute('fill', 'black')
