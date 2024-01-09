@@ -2,6 +2,7 @@ import { DifferentialGrowthSettings } from '../../ForceSource/DifferentialGrowth
 import { AlignmentUi } from './alignmentUi'
 import './differentialGrowthControlsView.css'
 import { NodeDistanceUi } from './nodeDistanceUi'
+import { RepulsionUi } from './repulsionUi'
 
 export type ParameterArea = {
     parameterAreaElement: HTMLDivElement,
@@ -13,14 +14,15 @@ export class DifferentialGrowthControlsView {
 
     element: HTMLElement
     alignmentUi: AlignmentUi
+    repulsionUi: RepulsionUi
     nodeDistanceUi: NodeDistanceUi
 
     constructor() {
         this.element = this.createGroup(['differentialGrowthControlsGroup'])
 
         this.alignmentUi = new AlignmentUi(this.createParameterArea(this.element, 'Alignment'), 0 ,1)
+        this.repulsionUi = new RepulsionUi(this.createParameterArea(this.element, 'Repulsion'), 0, 1)
         this.nodeDistanceUi = new NodeDistanceUi(this.createParameterArea(this.element, 'Node Distance'), 5, 30)
-        this.createParameterArea(this.element, 'Repulsion')
         this.createParameterArea(this.element, 'Repulsion Radius')
     }
 
@@ -70,12 +72,17 @@ export class DifferentialGrowthControlsView {
     }
     showSettings(settings: DifferentialGrowthSettings) {
         this.alignmentUi.setAlignmentMagnitude(settings.alignmentMagnitude)
+        this.repulsionUi.setRepulsionMagnitude(settings.repulsionMagnitude)
         this.nodeDistanceUi.setMaxNodeDistance(settings.maxNodeDistance)
         this.nodeDistanceUi.setMinNodeDistance(settings.minNodeDistance)
     }
 
     bindAlignmentMagnitudeChanged(callback: (alignmentMagnitude: number) => void) {
         this.alignmentUi.bindOnAlignmentMagnitudeChanged(callback)
+    }
+
+    bindRepulsionMagnitudeChanged(callback: (repulsionMagnitude: number) => void) {
+        this.repulsionUi.bindOnRepulsionMagnitudeChanged(callback)
     }
 
     bindMinNodeDistanceChanged(callback: (distance: number) => void) {
