@@ -18,8 +18,8 @@ export class NodeDistanceUi {
     constructor(parameterArea: ParameterArea, minValue: number, maxValue: number) {
         this.element = this.createGroup(['nodeDistanceGroup'])
         parameterArea.customAreaElement.appendChild(this.element)
-        this.minSlider = new Slider(this.element, 'min', minValue, maxValue)
-        this.maxSlider = new Slider(this.element, 'max', minValue, maxValue)
+        this.minSlider = new Slider(this.element, 'min', minValue, maxValue, 'circle')
+        this.maxSlider = new Slider(this.element, 'max', minValue, maxValue, 'circle')
 
         this.minSlider.sliderElement.addEventListener('change', this.onMinSliderChanged.bind(this))
         this.maxSlider.sliderElement.addEventListener('change', this.onMaxSliderClicked.bind(this))
