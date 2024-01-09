@@ -13,10 +13,16 @@ type Slider = {
 
 export class NodeDistanceUi {
     element: HTMLElement
+    resetButton: SVGElement
+
     minSlider: Slider
     maxSlider: Slider
     minValue: number
     maxValue: number
+
+    initialMinNodeDistance: number | undefined
+    initialMaxNodeDistance: number | undefined
+
     onMaxNodeDistanceChanged: ((distance: number) => void) | undefined
     onMinNodeDistanceChanged: ((distance: number) => void) | undefined
 
@@ -30,17 +36,36 @@ export class NodeDistanceUi {
 
         this.minSlider.sliderElement.addEventListener('click', this.onMinSliderClicked.bind(this))
         this.maxSlider.sliderElement.addEventListener('click', this.onMaxSliderClicked.bind(this))
+
+        this.resetButton = parameterArea.resetButton
+        this.resetButton.addEventListener('click', this.onResetClicked.bind(this))
+        this.setResetButtonVisibility(false)
+    }
+
+
+    onResetClicked() {
+        if (this.initialMinNodeDistance === undefined || this.initialMaxNodeDistance === undefined) {
+            return
+        }
+
+        this.setResetButtonVisibility(false)
+        this.onMinNodeDistanceChanged && this.onMinNodeDistanceChanged(this.initialMinNodeDistance)
+        this.onMaxNodeDistanceChanged && this.onMaxNodeDistanceChanged(this.initialMaxNodeDistance)
     }
 
     setMinNodeDistance(minNodeDistance: number) {
+        this.initialMinNodeDistance = this.initialMinNodeDistance || minNodeDistance;
 
         const newOffsetX = map(minNodeDistance, this.minValue, this.maxValue, minSliderXOffset, maxSliderXOffset)
         this.setSliderOffset(this.minSlider, newOffsetX)
     }
 
     setMaxNodeDistance(maxNodeDistance: number) {
+        this.initialMaxNodeDistance = this.initialMaxNodeDistance || maxNodeDistance;
+
         const newOffsetX = map(maxNodeDistance, this.minValue, this.maxValue, minSliderXOffset, maxSliderXOffset)
         this.setSliderOffset(this.maxSlider, newOffsetX)
+        console.log(this.initialMaxNodeDistance)
     }
 
     setSliderOffset(slider: Slider, offsetX: number) {
@@ -59,13 +84,21 @@ export class NodeDistanceUi {
 
     onMinSliderClicked(ev: MouseEvent) {
         const newDistance = map(ev.offsetX, minSliderXOffset, maxSliderXOffset, this.minValue, this.maxValue)
-        this.onMinNodeDistanceChanged && this.onMinNodeDistanceChanged(newDistance)
+        this.onChange(newDistance, this.onMinNodeDistanceChanged)
     }
-
 
     onMaxSliderClicked(ev: MouseEvent) {
         const newDistance = map(ev.offsetX, minSliderXOffset, maxSliderXOffset, this.minValue, this.maxValue)
-        this.onMaxNodeDistanceChanged && this.onMaxNodeDistanceChanged(newDistance)
+        this.onChange(newDistance, this.onMaxNodeDistanceChanged)
+    }
+
+    onChange(newDistance: number, callback: ((distance: number) => void) | undefined) {
+        this.setResetButtonVisibility(true)
+        callback && callback(newDistance)
+    }
+
+    setResetButtonVisibility(isVisible: boolean) {
+        this.resetButton.classList.toggle('hidden', !isVisible);
     }
 
     createGroup(classNames: string[]): HTMLElement {
@@ -111,7 +144,6 @@ export class NodeDistanceUi {
         knob.setAttribute('cy', '4')
         knob.setAttribute('r', '3.5')
         slider.appendChild(knob)
-
 
         sliderArea.appendChild(slider)
 
