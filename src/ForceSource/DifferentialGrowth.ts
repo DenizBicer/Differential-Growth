@@ -166,7 +166,7 @@ function ShrinkPathByNodeDistance(path: Path, minDistance: number) {
 
     const nodes = path.nodes
 
-    if (nodes.length < 3)
+    if (nodes.length < 20)
         return
 
     var i = nodes.length
