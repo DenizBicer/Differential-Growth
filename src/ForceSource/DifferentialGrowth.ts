@@ -166,11 +166,11 @@ function ShrinkPathByNodeDistance(path: Path, minDistance: number) {
 
     const nodes = path.nodes
 
-    if (nodes.length < 20)
-        return
-
     var i = nodes.length
     while (i--) {
+        if (nodes.length < 20)
+            return
+
         const node = nodes[i]
         const prevNode = path.tryGetPreviousNode(i)
         if (prevNode === null)
