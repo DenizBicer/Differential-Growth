@@ -1,7 +1,6 @@
 import { DifferentialGrowthSettings } from '../../ForceSource/DifferentialGrowth'
 import { AlignmentUi } from './alignmentUi'
 import './differentialGrowthControlsView.css'
-import { NodeDistanceUi } from './nodeDistanceUi'
 import { RepulsionUi } from './repulsionUi'
 
 export type ParameterArea = {
