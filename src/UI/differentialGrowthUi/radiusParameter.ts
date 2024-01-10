@@ -36,7 +36,7 @@ export class RadiusParameter{
     private center: Vector
 
     private readonly referencePointPlacements: ReferencePointPlacement[] = 
-        [{percentage: 0.25, angle: 20}, {percentage: 0.5, angle: 160}, {percentage: 0.75, angle: 280}]
+        [{percentage: 0.25, angle: 25}, {percentage: 0.6, angle: 160}, {percentage: 0.75, angle: 280}]
 
     private referencePoints: ReferencePoint[] = []
 
@@ -98,6 +98,15 @@ export class RadiusParameter{
         const newRadius = map(value, this.minValue, this.maxValue, this.minDisplayRadius, this.maxDisplayRadius)
         this.currentValue = value
         this.circleElement.setAttribute('r', `${newRadius}`)
+        this.updateReferencePointArrowVisibility()
+    }
+
+    private updateReferencePointArrowVisibility(): void {
+        const valuePercentage = this.currentValue/this.maxValue
+        this.referencePoints.forEach(referencePoint => {
+            const isWithinRange = referencePoint.placement.percentage <= valuePercentage
+            this.setArrowVisibility(referencePoint.arrow, isWithinRange)
+        })
     }
 
     private createReferencePoints(center: Vector): void {
@@ -109,6 +118,8 @@ export class RadiusParameter{
             this.sliderElement.appendChild(arrow.lineElement)
             this.sliderElement.appendChild(arrow.arrowElement)
             this.sliderElement.appendChild(node)
+
+            this.setArrowVisibility(arrow, false)
             this.referencePoints.push({point, arrow, placement})
         })
     }
@@ -158,6 +169,11 @@ export class RadiusParameter{
             lineElement: line,
             arrowElement: arrow
         }
+    }
+
+    setArrowVisibility(arrow:Arrow, isVisible: boolean) {
+        arrow.lineElement.classList.toggle('hidden', !isVisible)
+        arrow.arrowElement.classList.toggle('hidden', !isVisible)
     }
 
 
