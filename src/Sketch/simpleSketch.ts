@@ -1,12 +1,11 @@
 import p5 from "p5";
-import { GUI } from 'dat.gui'
 
 import { World } from "../Core/World";
-import { AddDifferentialGrowthParameters, CreateDifferentialGrowthParameterUi, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
+import { CreateDifferentialGrowthParameterUi, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
 import { PlayEvents, PlayControlsUi } from "../UI/playControlsUi";
-import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
+import { AddAttractionForce } from "../ForceSource/DirectedForce";
 
 export const sketch = (p: p5) => {
     let world: World
