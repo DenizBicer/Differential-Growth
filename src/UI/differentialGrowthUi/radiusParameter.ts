@@ -2,6 +2,23 @@ import { map } from "../../Core/Math"
 
 type Vector = {x: number, y: number}
 
+type ReferencePointPlacement = {
+    percentage: number,
+    angle: number
+}
+
+type ReferencePoint = {
+    point: Vector,
+    arrow: Arrow,
+    placement: ReferencePointPlacement
+}
+
+type Arrow = {
+    lineElement: SVGLineElement,
+    arrowElement: SVGPathElement    
+}
+
+
 export class RadiusParameter{
     currentValue: number = 0
     sliderElement: SVGElement
@@ -17,6 +34,11 @@ export class RadiusParameter{
     private maxValue: number
 
     private center: Vector
+
+    private readonly referencePointPlacements: ReferencePointPlacement[] = 
+        [{percentage: 0.25, angle: 20}, {percentage: 0.5, angle: 160}, {percentage: 0.75, angle: 280}]
+
+    private referencePoints: ReferencePoint[] = []
 
     constructor(parentElement:HTMLElement, minValue:number, maxValue:number, 
                 minDisplayRadius:number, maxDisplayRadius:number, 
@@ -54,6 +76,11 @@ export class RadiusParameter{
         this.circleElement.setAttribute('stroke-dasharray', '4 4')
         this.sliderElement.appendChild(this.circleElement)
 
+        const anchorCircle = this.createNode(this.center, 3.5)
+        this.sliderElement.appendChild(anchorCircle)
+
+        this.createReferencePoints(this.center)
+
 
         this.changeEvent = new Event('change')
 
@@ -67,12 +94,72 @@ export class RadiusParameter{
         document.addEventListener('touchmove', this.drag.bind(this))
     }
 
-
     public setValue(value: number): void {
         const newRadius = map(value, this.minValue, this.maxValue, this.minDisplayRadius, this.maxDisplayRadius)
         this.currentValue = value
         this.circleElement.setAttribute('r', `${newRadius}`)
     }
+
+    private createReferencePoints(center: Vector): void {
+        this.referencePointPlacements.forEach(placement => {
+            const point = this.calculatePoint(center, placement)
+            const node = this.createNode(point, 3.5)
+            const arrow = this.createArrow(point, 15, this.direction(center, point))
+
+            this.sliderElement.appendChild(arrow.lineElement)
+            this.sliderElement.appendChild(arrow.arrowElement)
+            this.sliderElement.appendChild(node)
+            this.referencePoints.push({point, arrow, placement})
+        })
+    }
+
+    private calculatePoint(center: Vector, placement: ReferencePointPlacement): Vector {
+        const angle = placement.angle
+        const radius = this.maxDisplayRadius * placement.percentage
+        const x = center.x + radius * Math.cos(angle * Math.PI / 180)
+        const y = center.y + radius * Math.sin(angle * Math.PI / 180)
+        return {x, y}
+    }
+
+    private createNode(point:Vector, radius:number)
+    {
+        const node = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        node.setAttribute('cx', `${point.x}`)
+        node.setAttribute('cy', `${point.y}`)
+        node.setAttribute('r', `${radius}`)
+        node.setAttribute('fill', 'black')
+        return node
+    }
+    
+    private createArrow(point: Vector, length: number, direction:Vector): Arrow {
+
+        const endPoint = this.add(point, this.multiply(direction, length))
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+        line.setAttribute('x1', `${point.x}`)
+        line.setAttribute('y1', `${point.y}`)
+        line.setAttribute('x2', `${endPoint.x}`)
+        line.setAttribute('y2', `${endPoint.y}`)
+        line.setAttribute('stroke-width', '3')
+        line.setAttribute('stroke', '#9B9B9B')
+
+        const rightDirection = this.perpendicular(direction, true)
+        const leftDirection = this.perpendicular(direction, false)
+       
+        const arrowSize = 7
+        const arrowTip = this.add(endPoint, this.multiply(direction, arrowSize))
+        const arrowRight = this.add(endPoint, this.multiply(rightDirection, arrowSize/2))
+        const arrowLeft = this.add(endPoint, this.multiply(leftDirection, arrowSize/2))
+
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        arrow.setAttribute('d', `M${arrowTip.x} ${arrowTip.y}L${arrowRight.x} ${arrowRight.y}L${arrowLeft.x} ${arrowLeft.y} L${arrowTip.x} ${arrowTip.y}Z`)
+        arrow.setAttribute('fill', '#9B9B9B')
+
+        return {
+            lineElement: line,
+            arrowElement: arrow
+        }
+    }
+
 
     private startDrag(event: MouseEvent | TouchEvent): void {
         event.preventDefault()
@@ -128,5 +215,28 @@ export class RadiusParameter{
 
     private distance(a: Vector, b: Vector): number {
         return Math.sqrt(Math.pow(a.x-b.x,2) + Math.pow(a.y-b.y,2))
+    }
+
+    private direction(a: Vector, b: Vector): Vector {
+        return this.normalize ({x: b.x-a.x, y: b.y-a.y})
+    }
+
+    private normalize(vector: Vector): Vector {
+        return {x: vector.x / this.distance({x:0, y:0}, vector), y: vector.y / this.distance({x:0, y:0}, vector)}    
+    }
+
+    private add(a: Vector, b: Vector): Vector {
+        return {x: a.x + b.x, y: a.y + b.y}
+    }
+
+    private multiply(a: Vector, b: number): Vector {
+        return {x: a.x * b, y: a.y * b}
+    }
+
+    private perpendicular(vector: Vector, clockWise: boolean): Vector {
+        if (clockWise)
+            return { x: vector.y, y: -vector.x }
+        else
+            return { x: -vector.y, y: vector.x }
     }
 }

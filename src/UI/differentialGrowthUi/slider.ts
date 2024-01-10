@@ -83,8 +83,6 @@ export class Slider {
         this.sliderElement.appendChild(this.knobElement)
 
 
-
-
         parentElement.appendChild(sliderArea)
 
 

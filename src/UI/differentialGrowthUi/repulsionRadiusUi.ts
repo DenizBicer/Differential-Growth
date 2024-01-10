@@ -16,7 +16,7 @@ export class RepulsionRadiusUi{
         repulsionRadiusGroup.classList.add('repulsionRadiusGroup')
         parameterArea.customAreaElement.appendChild(repulsionRadiusGroup)
 
-        this.repulsionRadiusParameter = new RadiusParameter(repulsionRadiusGroup, minValue, maxValue, 10, 40)
+        this.repulsionRadiusParameter = new RadiusParameter(repulsionRadiusGroup, minValue, maxValue, 10, 65)
         this.repulsionRadiusParameter.sliderElement.addEventListener('change', (() => this.onSliderChanged()).bind(this))
 
         this.resetButton = parameterArea.resetButton
