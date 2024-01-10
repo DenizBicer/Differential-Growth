@@ -49,11 +49,11 @@ export class NodeDistanceUi {
         this.maxSlider.setValue(maxNodeDistance)
     }
 
-    bindOnMaxDistanceChanged(callback: (distance: number) => void) {
+    bindOnMaxNodeDistanceChanged(callback: (distance: number) => void) {
         this.onMaxNodeDistanceChanged = callback
     }
 
-    bindOnMinDistanceChanged(callback: (distance: number) => void) {
+    bindOnMinNodeDistanceChanged(callback: (distance: number) => void) {
         this.onMinNodeDistanceChanged = callback
     }
 

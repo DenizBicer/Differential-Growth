@@ -69,13 +69,13 @@ class DifferentialGrowthController {
     }
 
     minNodeDistanceChanged(nodeDistance: number) {
-        const checkedNodeDistance = Math.min(nodeDistance, settings.maxNodeDistance)
+        const checkedNodeDistance = Math.min(nodeDistance, settings.maxNodeDistance - 5)
         settings.minNodeDistance = checkedNodeDistance
         this.model._commit(settings)
     }
 
     maxNodeDistanceChanged(nodeDistance: number) {
-        const checkedNodeDistance = Math.max(nodeDistance, settings.minNodeDistance)
+        const checkedNodeDistance = Math.max(nodeDistance, settings.minNodeDistance + 5)
         settings.maxNodeDistance = checkedNodeDistance
         this.model._commit(settings)
     }

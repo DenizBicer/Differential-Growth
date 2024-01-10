@@ -1,6 +1,7 @@
 import { DifferentialGrowthSettings } from '../../ForceSource/DifferentialGrowth'
 import { AlignmentUi } from './alignmentUi'
 import './differentialGrowthControlsView.css'
+import { NodeDistanceUi } from './nodeDistanceUi'
 import { RepulsionRadiusUi } from './repulsionRadiusUi'
 import { RepulsionUi } from './repulsionUi'
 
@@ -16,6 +17,7 @@ export class DifferentialGrowthControlsView {
     alignmentUi: AlignmentUi
     repulsionUi: RepulsionUi
     repulsionRadiusUi: RepulsionRadiusUi
+    nodeDistanceUi: NodeDistanceUi
 
     constructor() {
         this.element = this.createGroup(['differentialGrowthControlsGroup'])
@@ -23,6 +25,7 @@ export class DifferentialGrowthControlsView {
         this.alignmentUi = new AlignmentUi(this.createParameterArea(this.element, 'Alignment'), 0 ,1)
         this.repulsionUi = new RepulsionUi(this.createParameterArea(this.element, 'Repulsion'), 0, 1)
         this.repulsionRadiusUi = new RepulsionRadiusUi(this.createParameterArea(this.element, 'Repulsion Radius'), 10, 100)
+        this.nodeDistanceUi = new NodeDistanceUi(this.createParameterArea(this.element, 'Node Distance'), 5, 30)
     }
 
     createGroup(classNames: string[]): HTMLElement {
@@ -73,6 +76,8 @@ export class DifferentialGrowthControlsView {
         this.alignmentUi.setAlignmentMagnitude(settings.alignmentMagnitude)
         this.repulsionUi.setRepulsionMagnitude(settings.repulsionMagnitude)
         this.repulsionRadiusUi.setRepulsionRadius(settings.repulsionRadius)
+        this.nodeDistanceUi.setMinNodeDistance(settings.minNodeDistance)
+        this.nodeDistanceUi.setMaxNodeDistance(settings.maxNodeDistance)
     }
 
     bindAlignmentMagnitudeChanged(callback: (alignmentMagnitude: number) => void) {
@@ -88,9 +93,11 @@ export class DifferentialGrowthControlsView {
     }
 
     bindMinNodeDistanceChanged(callback: (distance: number) => void) {
+        this.nodeDistanceUi.bindOnMinNodeDistanceChanged(callback)
     }
 
     bindMaxNodeDistanceChanged(callback: (distance: number) => void) {
+        this.nodeDistanceUi.bindOnMaxNodeDistanceChanged(callback)
     }
 
 
