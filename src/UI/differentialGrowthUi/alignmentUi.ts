@@ -1,5 +1,6 @@
 import { ParameterArea } from "./differentialGrowthControlsView";
 import { Slider } from "./slider";
+import './alignmentUi.css'
 
 export class AlignmentUi {
     private resetButton: SVGElement
@@ -11,7 +12,12 @@ export class AlignmentUi {
     private onAlignmentMagnitudeChanged: ((alignmentMagnitude: number) => void) | undefined
 
     constructor(parameterArea: ParameterArea, minValue: number, maxValue: number) {
-        this.alignmentSlider = new Slider(parameterArea.customAreaElement, '', minValue, maxValue, 'triangle')
+        const alignmentGroup = document.createElement('div')
+        alignmentGroup.classList.add('alignmentGroup')
+        parameterArea.customAreaElement.appendChild(alignmentGroup)
+
+
+        this.alignmentSlider = new Slider(alignmentGroup, '', minValue, maxValue, 'triangle', 56)
         this.alignmentSlider.sliderElement.addEventListener('change', this.onSliderChanged.bind(this))
 
         this.resetButton = parameterArea.resetButton

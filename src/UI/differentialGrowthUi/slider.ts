@@ -41,7 +41,7 @@ export class Slider {
         this.sliderElement.setAttribute('height', `${height}`)
         this.sliderElement.setAttribute('viewBox', `0 0 ${width} ${height}`)
         this.sliderElement.setAttribute('fill', '#7747FF')
-        this.sliderElement.setAttribute('stroke', '#9B9B9B')
+        this.sliderElement.setAttribute('stroke', 'none')
 
         this.lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'line')
         this.lineElement.setAttribute('x1', this.minSliderXOffset.toString())
@@ -49,6 +49,7 @@ export class Slider {
         this.lineElement.setAttribute('x2', '70')
         this.lineElement.setAttribute('y2', halfHeight.toString())
         this.lineElement.setAttribute('stroke-width', '3')
+        this.lineElement.setAttribute('stroke', '#9B9B9B')
         this.sliderElement.appendChild(this.lineElement)
 
         const anchorCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
