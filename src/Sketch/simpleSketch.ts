@@ -6,6 +6,7 @@ import { AddDifferentialGrowthParameters, CreateDifferentialGrowthParameterUi, D
 import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
 import { PlayEvents, PlayControlsUi } from "../UI/playControlsUi";
+import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -27,6 +28,7 @@ export const sketch = (p: p5) => {
         const gui = new GUI()
 
         AddDifferentialGrowthParameters(gui)
+        AddDirectedForceParameters(gui)
 
         const playControlsUi = new PlayControlsUi(events, isPlaying)
         canvas.elt.parentElement.before(playControlsUi.element)
@@ -62,6 +64,9 @@ export const sketch = (p: p5) => {
     function update() {
         world.preUpdate()
         DifferentialGrowthUpdate(world.paths, world.tree)
+        
+        const center = p.createVector(p.width / 2, p.height / 2)
+        AddAttractionForce(center, world.paths)
         world.lateUpdate()
     }
 
