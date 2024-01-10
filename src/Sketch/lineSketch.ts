@@ -5,7 +5,7 @@ import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
-import { CreateCirclePath, CreateLinePath } from "../Core/path";
+import { CreateCirclePath } from "../Core/path";
 import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
 import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
 import {record} from "../Record/recording";
@@ -106,10 +106,6 @@ export const sketch = (p: p5) => {
     function restart() {
         world.clear()
 
-        const margin = p.width / 20
-        const y = p.height / 2
-        // const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
-        // path.nodes.forEach(n => n.isFixed = true)
         const path = CreateCirclePath(p.createVector(p.width / 2, p.height / 2), 100)
         world.addPath(path)
     }

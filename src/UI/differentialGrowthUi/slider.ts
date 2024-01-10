@@ -112,7 +112,7 @@ export class Slider {
         this.sliderElement.classList.add('active')
     }
 
-    private stopDrag(event: MouseEvent | TouchEvent): void {
+    private stopDrag(): void {
         if (this.sliderElement.classList.contains('active')) {
             this.sliderElement.dispatchEvent(this.changeEvent)
         }
