@@ -25,11 +25,7 @@ export const sketch = (p: p5) => {
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
 
         world = new World()
-        const gui = new GUI()
-
-        AddDifferentialGrowthParameters(gui)
-        AddDirectedForceParameters(gui)
-
+        
         const playControlsUi = new PlayControlsUi(events, isPlaying)
         canvas.elt.parentElement.before(playControlsUi.element)
 
