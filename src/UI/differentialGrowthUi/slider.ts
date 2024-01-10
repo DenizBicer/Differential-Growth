@@ -114,7 +114,6 @@ export class Slider {
 
     private stopDrag(event: MouseEvent | TouchEvent): void {
         if (this.sliderElement.classList.contains('active')) {
-            this.currentValue = this.calculateValueBasedOnEvent(event)
             this.sliderElement.dispatchEvent(this.changeEvent)
         }
         this.sliderElement.classList.remove('active')
