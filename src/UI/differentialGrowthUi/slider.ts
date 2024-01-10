@@ -49,6 +49,7 @@ export class Slider {
         this.sliderElement.setAttribute('viewBox', `0 0 ${width} ${height}`)
         this.sliderElement.setAttribute('fill', '#7747FF')
         this.sliderElement.setAttribute('stroke', 'none')
+        sliderArea.appendChild(this.sliderElement)
 
         this.lineElement = document.createElementNS('http://www.w3.org/2000/svg', 'line')
         this.lineElement.setAttribute('x1', this.minSliderXOffset.toString())
@@ -83,7 +84,6 @@ export class Slider {
 
 
 
-        sliderArea.appendChild(this.sliderElement)
 
         parentElement.appendChild(sliderArea)
 

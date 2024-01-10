@@ -59,6 +59,7 @@ class DifferentialGrowthController {
         this.view.bindMinNodeDistanceChanged(this.minNodeDistanceChanged.bind(this))
         this.view.bindAlignmentMagnitudeChanged(this.alignmentMagnitudeChanged.bind(this))
         this.view.bindRepulsionMagnitudeChanged(this.repulsionMagnitudeChanged.bind(this))
+        this.view.bindRepulsionRadiusChanged(this.repulsionRadiusChanged.bind(this))
 
         this.onSettingsChanged(this.model.settings)
     }
@@ -86,6 +87,11 @@ class DifferentialGrowthController {
 
     repulsionMagnitudeChanged(repulsionMagnitude: number) {
         settings.repulsionMagnitude = repulsionMagnitude
+        this.model._commit(settings)
+    }
+
+    repulsionRadiusChanged(repulsionRadius: number) {
+        settings.repulsionRadius = repulsionRadius
         this.model._commit(settings)
     }
 }
