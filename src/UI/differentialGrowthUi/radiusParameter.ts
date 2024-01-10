@@ -180,12 +180,11 @@ export class RadiusParameter{
     private startDrag(event: MouseEvent | TouchEvent): void {
         event.preventDefault()
         this.sliderElement.classList.add('active')
+        this.currentValue = this.calculateValueBasedOnEvent(event)
+            this.sliderElement.dispatchEvent(this.changeEvent)
     }
 
     private stopDrag(): void {
-        if (this.sliderElement.classList.contains('active')) {
-            this.sliderElement.dispatchEvent(this.changeEvent)
-        }
         this.sliderElement.classList.remove('active')
     }
 
