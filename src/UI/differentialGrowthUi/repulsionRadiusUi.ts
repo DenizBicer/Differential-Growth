@@ -1,5 +1,6 @@
 import { ParameterArea } from "./differentialGrowthControlsView"
 import { RadiusParameter } from "./radiusParameter"
+import './repulsionRadiusUi.css'
 
 export class RepulsionRadiusUi{
     private resetButton: SVGElement
