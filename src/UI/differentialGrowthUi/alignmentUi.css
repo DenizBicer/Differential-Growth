@@ -8,6 +8,6 @@
     transform: rotate(25deg);
 
     .sliderArea {
-        transform: translate(-41.5px,49.5px);
+        transform: translate(-2px,49.5px);
     }
 }

@@ -1,6 +1,7 @@
 import { map } from "../../Core/Math"
 
 export type KnobType = 'circle' | 'triangle'
+export type Direction = 'forward' | 'backward'
 
 export class Slider {
     sliderElement: SVGElement
@@ -18,20 +19,26 @@ export class Slider {
     private maxValue: number
 
     private knobYOffset: number = 0
+    private direction: Direction
 
-    constructor(parentElement: HTMLElement, label: string, minValue: number, maxValue: number, knobType: KnobType, length: number = 80, height:number = 20, padding: number = 10) {
+    constructor(parentElement: HTMLElement, label: string, minValue: number, maxValue: number, knobType: KnobType,
+                length: number = 80, height: number = 20, padding: number = 10, direction: Direction = 'forward') {
+
         this.minValue = minValue
         this.maxValue = maxValue
-        this.minSliderXOffset = padding
-        this.maxSliderXOffset = length
+        this.minSliderXOffset = direction === 'forward' ? padding : length
+        this.maxSliderXOffset = direction === 'forward' ? length : padding
+        this.direction = direction
 
         const sliderArea = document.createElement('div')
         sliderArea.classList.add('sliderArea')
 
-        const sliderLabel = document.createElement('div')
-        sliderLabel.classList.add('sliderLabel')
-        sliderLabel.innerText = label
-        sliderArea.appendChild(sliderLabel)
+        if (label.length > 0) {
+            const sliderLabel = document.createElement('div')
+            sliderLabel.classList.add('sliderLabel')
+            sliderLabel.innerText = label
+            sliderArea.appendChild(sliderLabel)
+        }
 
         const width = length + padding
         const halfHeight = height / 2
@@ -96,7 +103,9 @@ export class Slider {
     public setValue(value: number): void {
         const newOffsetX = map(value, this.minValue, this.maxValue, this.minSliderXOffset, this.maxSliderXOffset)
         this.currentValue = value
-        this.knobElement.setAttribute('transform', `translate(${newOffsetX}, ${this.knobYOffset})`);
+
+        const scale = this.direction === 'forward' ? '' : 'scale(-1,1)'
+        this.knobElement.setAttribute('transform', `translate(${newOffsetX}, ${this.knobYOffset}) ${scale}`);
         this.lineElement.setAttribute('x2', `${newOffsetX}`)
     }
 

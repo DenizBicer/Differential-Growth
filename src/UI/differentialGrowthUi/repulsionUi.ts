@@ -1,5 +1,6 @@
 import { ParameterArea } from "./differentialGrowthControlsView"
 import { Slider } from "./slider"
+import './repulsionUi.css'
 
 export class RepulsionUi{
     private resetButton: SVGElement
@@ -12,10 +13,17 @@ export class RepulsionUi{
     private onRepulsionMagnitudeChanged: ((repulsionMagnitude: number) => void) | undefined
 
     constructor(parameterArea: ParameterArea, minValue: number, maxValue: number) {
-        this.repulsionSlider = new Slider(parameterArea.customAreaElement, '', minValue, maxValue, 'triangle')
+        const repulsionGroup = document.createElement('div')
+        repulsionGroup.classList.add('repulsionGroup')
+        parameterArea.customAreaElement.appendChild(repulsionGroup)
+
+        const sliderLength = 60
+
+        this.repulsionSlider = new Slider(repulsionGroup, '', minValue, maxValue, 'triangle', sliderLength,
+                                            20,10, 'backward')
         this.repulsionSlider.sliderElement.addEventListener('change', (() => this.onSliderChanged(this.repulsionSlider)).bind(this))
 
-        this.repulsionDuplicateSlider = new Slider(parameterArea.customAreaElement, '', minValue, maxValue, 'triangle')
+        this.repulsionDuplicateSlider = new Slider(repulsionGroup, '', minValue, maxValue, 'triangle', sliderLength)
         this.repulsionDuplicateSlider.sliderElement.addEventListener('change', (() => this.onSliderChanged(this.repulsionDuplicateSlider)).bind(this))
 
         this.resetButton = parameterArea.resetButton
