@@ -84,24 +84,14 @@ export class PlayControlsUi {
     }
 
     setElementActive(element: HTMLElement, isActive: boolean) {
-        this.setElementClassNameFlag(element, isActive, 'active', 'inactive')
+        element.classList.toggle('active', isActive)
+        element.classList.toggle('inactive', !isActive)
     }
 
     setElementEnabled(element: HTMLElement, isEnabled: boolean) {
-        this.setElementClassNameFlag(element, isEnabled, 'enabled', 'disabled')
+        element.classList.toggle('enabled', isEnabled)
+        element.classList.toggle('disabled', !isEnabled)
     }
 
-    setElementClassNameFlag(element: HTMLElement, flag: boolean, trueClassName: string, falseClassName: string) {
-        if (flag) {
-            this.exchangeClassNames(element, trueClassName, falseClassName)
-        }
-        else {
-            this.exchangeClassNames(element, falseClassName, trueClassName)
-        }
-    }
-
-    exchangeClassNames(element: HTMLElement, newClassName: string, oldClassName: string) {
-        element.classList.add(newClassName)
-        element.classList.remove(oldClassName)
-    }
+    
 }
