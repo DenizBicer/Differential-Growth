@@ -186,8 +186,6 @@ export class RadiusParameter{
         if (this.sliderElement.classList.contains('active')) {
             this.currentValue = this.calculateValueBasedOnEvent(event)
             this.sliderElement.dispatchEvent(this.changeEvent)
-            
-            this.setValue(this.currentValue)
         }
         this.sliderElement.classList.remove('active')
     }
@@ -196,8 +194,6 @@ export class RadiusParameter{
         if (this.sliderElement.classList.contains('active')) {            
             this.currentValue = this.calculateValueBasedOnEvent(event)
             this.sliderElement.dispatchEvent(this.changeEvent)
-
-            this.setValue(this.currentValue)
         }
     }
 
