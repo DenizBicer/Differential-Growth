@@ -57,6 +57,7 @@ export class Slider {
         this.lineElement.setAttribute('x2', '70')
         this.lineElement.setAttribute('y2', halfHeight.toString())
         this.lineElement.setAttribute('stroke-width', '3')
+        this.lineElement.setAttribute('stroke', '#7747FF')
         this.sliderElement.appendChild(this.lineElement)
 
         const anchorCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')

@@ -22,15 +22,10 @@
         /* layout */
         width: 130px;
         height: 120px;
-
-        svg {
-            stroke: #9B9B9B;
-        }
-
-        svg:hover {
+        
+        svg:hover{
             cursor: pointer;
-            fill: rgba(119, 71, 255, 0.80);
-            stroke: rgba(119, 71, 255, 0.80);
+            filter: drop-shadow(2px 2px 6px #7747FF);
         }
     }
 
