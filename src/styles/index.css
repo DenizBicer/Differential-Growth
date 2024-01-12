@@ -28,3 +28,12 @@
     height: 1050px;
     /* 1px is 10 mm*/ 
 }
+
+.top-navigation {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 24px;
+
+    
+}
