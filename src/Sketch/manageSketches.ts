@@ -7,6 +7,14 @@ export type SketchMap = {
     htmlElement?: HTMLElement | null
 }
 
+export type size = {width: number, height: number}
+
+export function calculateCanvasSize(canvas: p5.Renderer) : size
+{
+    const sketchElement = canvas.elt.parentElement
+    return {width: sketchElement.offsetWidth, height:sketchElement.offsetHeight}
+}
+
 export class sketchManager {
     sketches: SketchMap[]
     constructor(sketches: SketchMap[]) {

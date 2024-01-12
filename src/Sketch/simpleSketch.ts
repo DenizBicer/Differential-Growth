@@ -6,6 +6,7 @@ import { CreateCirclePath } from "../Core/path";
 import { drawPath } from "../Draw/PathDraw";
 import { PlayEvents, PlayControlsUi } from "../UI/playControlsUi";
 import { AddAttractionForce } from "../ForceSource/DirectedForce";
+import { calculateCanvasSize } from "./manageSketches";
 
 export const sketch = (p: p5) => {
     let world: World
@@ -22,6 +23,8 @@ export const sketch = (p: p5) => {
 
     p.setup = () => {
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
+        const canvasSize = calculateCanvasSize(canvas)
+        p.resizeCanvas(canvasSize.width, canvasSize.height)
 
         world = new World()
         
@@ -83,5 +86,9 @@ export const sketch = (p: p5) => {
 
     function updatePlay(play: boolean) {
         isPlaying = play
+    }
+
+    p.windowResized = () =>{
+        restart()
     }
 }
