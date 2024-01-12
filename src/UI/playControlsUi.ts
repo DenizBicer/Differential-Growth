@@ -31,6 +31,7 @@ export class PlayControlsUi {
         this.nextFrameButton = this.createButton('next-frame', ['playButton'], this.element, this.events.nextFrame)
 
         this.updateButtons()
+        this.updatePlay()
     }
 
 
@@ -50,21 +51,26 @@ export class PlayControlsUi {
     }
 
     play() {
-        if (this.isSimulationStarted) {
-            this.events.clear()
-        }
-        else {
-            this.events.restart()
-        }
-
         this.isSimulationStarted = !this.isSimulationStarted;
 
+        this.updatePlay()
         this.updatePlayState()
     }
 
     pause() {
         this.isPaused = !this.isPaused
         this.updatePlayState()
+    }
+
+    updatePlay()
+    {
+        if (this.isSimulationStarted) {
+            this.events.restart()
+        }
+        else {
+            this.events.clear()
+        }
+
     }
 
     updatePlayState() {

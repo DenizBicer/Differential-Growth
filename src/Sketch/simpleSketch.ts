@@ -19,7 +19,7 @@ export const sketch = (p: p5) => {
 
 
 
-    let isPlaying: boolean = false
+    let isPlaying: boolean = true
 
     p.setup = () => {
         const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
