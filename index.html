@@ -11,6 +11,9 @@
 <body>
   <div class="top-navigation">
     <p>
+      <a href="https://denizbicer.com/">Home</a>
+    </p>
+    <p>
       <a href="https://twitter.com/ojelibalon">Twitter</a>
     </p>
     <p>
@@ -18,10 +21,51 @@
     </p>
   </div>
   <article>
-    <h1><a href="#Differential-Growth">Differential Growth</a></h1>
-    <h2></h2>
+    <h1><a href="#Differential-Growth">Exploring the Differential Growth Algorithm</a></h1>
+    <h2>An experiment on custom input parameters</h2>
     <time datetime="12-01-2024">Jan. 12, 2024</time>
     <p>
+      Diving into a new algorithm can often feel overwhelming, with its myriad terms and equations. But it doesn’t have
+      to be that way. With the interactive potential of modern websites, we can transform learning experiences from
+      static and daunting to dynamic and engaging.
+
+    </p>
+
+    <p>
+      One such algorithm is the differential growth algorithm. While there are several excellent blog posts explaining
+      its mechanics (thanks to <a href="https://medium.com/@jason.webb/2d-differential-growth-in-js-1843fd51b0ce">Jason
+        Webb</a> and <a href="https://inconvergent.net/2016/shepherding-random-growth/">Inconvergent</a>), I felt there
+      was a missing element of playfulness. The parameters of this algorithm are much easier to understand when you can
+      see their effects in real-time rather than just reading about them. This inspired me to create an explorable
+      explanation of the differential growth algorithm.
+    </p>
+
+    <p>
+      To facilitate this interactive learning, I have prepared a playground where you can adjust the parameters and
+      immediately observe their effects. This hands-on approach can demystify the algorithm and make the learning
+      process more intuitive and enjoyable.
+    </p>
+
+    <p>
+      The differential growth algorithm revolves around four main parameters:
+    </p>
+
+    <ol>
+      <li><b>Alignment Force:</b> Each node applies a force to maintain a straight line with its connected nodes,
+        promoting orderly growth.</li>
+      <li><b>Repulsion Force:</b> Each node applies a force to keep a distance from other nodes, preventing
+        overcrowding.</li>
+      <li><b>Repulsion Radius: </b>This defines the detection radius within which the repulsion force is applied to
+        other nodes.</li>
+      <li><b>Node Distance:</b> This parameter governs the behavior based on node proximity. If nodes are closer than
+        the minimum distance, they merge into one node. Conversely, if nodes are farther apart than the maximum
+        distance, a new node is created between them.</li>
+    </ol>
+    <p></p>
+    <p>
+      Try experimenting with these parameters in the interactive playground to see how each one influences the
+      algorithm's behavior. This way, you can grasp the concepts more effectively than through static explanations
+      alone.
     </p>
     <div id="sketch" class="size-2 sketch">
       <!-- p5 instance will be created here -->

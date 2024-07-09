@@ -28,6 +28,13 @@ p {
     color: hsl(0, 0%, 33%)
 }
 
+li {
+    font: 400 1.0rem/1.5 -apple-system, helvetica, sans-serif;
+    color: hsl(0, 0%, 33%);
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
 .highlight {
     background-color: #a7e0e2;
 }
