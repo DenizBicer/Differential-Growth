@@ -1,13 +1,13 @@
 import p5 from "p5";
 import {GUI} from 'dat.gui'
 
-import { World } from "../Core/World";
-import { AddDropForce } from "../ForceSource/InkDrop";
-import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
-import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
-import { CreateLinePath} from "../Core/path";
-import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
-import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
+import {World} from "../Core/World";
+import {AddDropForce} from "../ForceSource/InkDrop";
+import {AddDifferentialGrowthParameters, DifferentialGrowthUpdate} from "../ForceSource/DifferentialGrowth";
+import {AddCustomForce, AddDirectedForceParameters} from "../ForceSource/DirectedForce";
+import {CreateLinePath} from "../Core/path";
+import {AddMeshDrawParameters, DrawMesh} from "../Draw/MeshDraw";
+import {AddNodeDrawParameters, DrawNode} from "../Draw/NodeDraw";
 import {record} from "../Record/recording";
 import {PlayControlsUi, PlayEvents} from "../UI/playControlsUi";
 
@@ -98,15 +98,27 @@ export const sketch = (p: p5) => {
 
 
     function update() {
-        const center = p.createVector(p.width / 2, p.height / 2)
 
         world.preUpdate()
-
         DifferentialGrowthUpdate(world.paths, world.tree)
-        AddAttractionForce(center, world.paths)
+
+        const midY = p.height / 2
+        const range = 150
+        const pushMagnitude = 100
+        AddCustomForce(world.paths, (node) => {
+            if (node.point.y > midY + range / 2) {
+                return p.createVector(0, -pushMagnitude, 0)
+            } else if (node.point.y < midY - range / 2) {
+                return p.createVector(0, pushMagnitude, 0)
+            } else {
+                return p.createVector()
+            }
+        })
         world.lateUpdate()
 
-
+        // const midY = p.height / 2
+        // const range = 150
+        // KillNodes(world.paths, (node) => node.point.y > midY + range / 2 || node.point.y < midY - range / 2)
     }
 
     function updatePlay(play: boolean) {
@@ -119,13 +131,14 @@ export const sketch = (p: p5) => {
     }
 
     function restart() {
-        if(!world) {
+        if (!world) {
             return
         }
 
         world.clear()
         const margin = p.width / 20
         const y = p.height / 2
+
         const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
         world.addPath(path)
     }
