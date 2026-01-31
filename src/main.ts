@@ -6,7 +6,7 @@ import './styles/button.css'
 import './styles/text.css'
 
 import { sketchManager, SketchMap } from './Sketch/manageSketches'
-import { sketch } from './Sketch/simpleSketch'
+import { sketch } from './Sketch/lineSketch'
 
 const sketches: SketchMap[] = [
   {
