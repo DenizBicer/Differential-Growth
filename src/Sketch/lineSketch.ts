@@ -5,21 +5,29 @@ import { World } from "../Core/World";
 import { AddDropForce } from "../ForceSource/InkDrop";
 import { AddDifferentialGrowthParameters, DifferentialGrowthUpdate } from "../ForceSource/DifferentialGrowth";
 import { AddAttractionForce, AddDirectedForceParameters } from "../ForceSource/DirectedForce";
-import {CreateCirclePath, CreateLinePath} from "../Core/path";
+import { CreateLinePath} from "../Core/path";
 import { AddMeshDrawParameters, DrawMesh } from "../Draw/MeshDraw";
 import { AddNodeDrawParameters, DrawNode } from "../Draw/NodeDraw";
 import {record} from "../Record/recording";
+import {PlayControlsUi, PlayEvents} from "../UI/playControlsUi";
 
 export const sketch = (p: p5) => {
     let world: World
     let currentPushRadius: number
     let isPushing: boolean
 
-    const settings = {
-        debug: false,
-        play: true,
+    const events: PlayEvents = {
+        updatePlay,
         nextFrame,
         restart,
+        clear,
+    }
+
+    let isPlaying: boolean = true
+
+
+    const settings = {
+        debug: false,
         toggleRecording,
         backgroundGray: 255,
         backgroundAlpha: 255,
@@ -31,6 +39,9 @@ export const sketch = (p: p5) => {
         const canvas = p.createCanvas(800, 600)
         canvas.mousePressed(mousePressed)
         canvas.mouseReleased(mouseReleased)
+
+        const playControlsUi = new PlayControlsUi(events, isPlaying)
+        canvas.elt.parentElement.before(playControlsUi.element)
 
         world = new World()
         const gui = new GUI()
@@ -60,7 +71,7 @@ export const sketch = (p: p5) => {
             AddDropForce(dropPoint, currentPushRadius * settings.dropImpactFactor, world.paths)
         }
 
-        if (settings.play) {
+        if (isPlaying) {
             update()
         }
 
@@ -98,17 +109,29 @@ export const sketch = (p: p5) => {
 
     }
 
+    function updatePlay(play: boolean) {
+        isPlaying = play
+    }
+
 
     function nextFrame() {
         update()
     }
 
     function restart() {
+        if(!world) {
+            return
+        }
+
         world.clear()
         const margin = p.width / 20
         const y = p.height / 2
         const path = CreateLinePath(p.createVector(margin, y), p.createVector(p.width - margin, y))
         world.addPath(path)
+    }
+
+    function clear() {
+        world.clear()
     }
 
     function toggleRecording() {
